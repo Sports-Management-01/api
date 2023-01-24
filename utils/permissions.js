@@ -13,6 +13,15 @@ permissions = [
     "payment:store",
     "payment:update",
     "payment:destroy",
+
+    "role:index",
+    "role:show",
+    "role:store",
+    "role:update",
+    "role:destroy",
+
+    "permission:assign",
+
 ]
 
 module.exports = permissions

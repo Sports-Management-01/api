@@ -24,12 +24,14 @@ module.exports = (sequelize, DataTypes) => {
 
     async can(permission) {
       const role = await this.getRole()
+      // console.log('Role', role)
       const permissionRow = await role.getPermissions({
         where: {
           permission
         }
       })
-      return permissionRow.allowed
+      // console.log('PERMISSION', permissionRow)
+      return permissionRow[0].allowed
     }
   }
   User.init({
