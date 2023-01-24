@@ -19,14 +19,14 @@ module.exports = (sequelize, DataTypes) => {
     length: DataTypes.INTEGER,
     width: DataTypes.INTEGER,
     hourPrice: DataTypes.INTEGER,
-    from: DataTypes.INTEGER,
-    to: DataTypes.INTEGER,
-    city: DataTypes.STRING,
-    state: DataTypes.STRING,
+    from: DataTypes.STRING, // 09:00
+    to: DataTypes.STRING,
+    cityId: DataTypes.INTEGER,
+    stateId: DataTypes.INTEGER,
     adress: DataTypes.STRING,
-    latitude: DataTypes.INTEGER,
-    longitude: DataTypes.INTEGER,
-    isActive: DataTypes.STRING
+    latitude: DataTypes.DECIMAL,
+    longitude: DataTypes.DECIMAL,
+    isActive: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'Field',

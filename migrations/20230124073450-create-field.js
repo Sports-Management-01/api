@@ -7,46 +7,46 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER.UNSIGNED
       },
       companyId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER.UNSIGNED
       },
       categoryId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER.UNSIGNED
       },
       length: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER.UNSIGNED
       },
       width: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER.UNSIGNED
       },
       hourPrice: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER.UNSIGNED
       },
       from: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING(5)
       },
       to: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING(5)
       },
       city: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER.UNSIGNED
       },
       state: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER.UNSIGNED
       },
       adress: {
         type: Sequelize.STRING
       },
       latitude: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(10, 8)
       },
       longitude: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(11,8)
       },
       isActive: {
-        type: Sequelize.STRING
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,

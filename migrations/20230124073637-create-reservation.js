@@ -7,22 +7,22 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER.UNSIGNED
       },
       fieldId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER.UNSIGNED
       },
       userId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER.UNSIGNED
       },
       from: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DATE
       },
       to: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DATE
       },
       total: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER.UNSIGNED
       },
       createdAt: {
         allowNull: false,
