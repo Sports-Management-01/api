@@ -11,6 +11,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Field.belongsTo(models.User, {
+        foreignKey: 'comapnyId'
+      })
+      Field.belongsTo(models.Category, {
+        foreignKey: 'categotyId'
+      })
+      Field.hasMany(models.Reservation, {
+        foreignKey: "fieldId"
+      })
+      
     }
   }
   Field.init({
@@ -26,7 +36,8 @@ module.exports = (sequelize, DataTypes) => {
     adress: DataTypes.STRING,
     latitude: DataTypes.DECIMAL,
     longitude: DataTypes.DECIMAL,
-    isActive: DataTypes.BOOLEAN
+    isActive: DataTypes.BOOLEAN,
+    image: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Field',
