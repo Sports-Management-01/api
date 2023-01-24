@@ -21,6 +21,16 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "userId"
       })
     }
+
+    async can(permission) {
+      const role = await this.getRole()
+      const permissionRow = await role.getPermissions({
+        where: {
+          permission
+        }
+      })
+      return permissionRow.allowed
+    }
   }
   User.init({
     name: DataTypes.STRING,
@@ -36,4 +46,4 @@ module.exports = (sequelize, DataTypes) => {
     paranoid: true
   });
   return User;
-};
+}; 
