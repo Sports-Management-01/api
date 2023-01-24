@@ -30,10 +30,7 @@ module.exports = {
       to: {
         type: Sequelize.STRING(5)
       },
-      city: {
-        type: Sequelize.INTEGER.UNSIGNED
-      },
-      state: {
+      stateId: {
         type: Sequelize.INTEGER.UNSIGNED
       },
       adress: {
