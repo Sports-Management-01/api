@@ -4,9 +4,21 @@ const models = require("../models");
 const permission = require('../models/permission');
 
 /* GET home page. */
-router.get('/', async (req, res, next)=> {
+router.get(
+  '/',
+  isAuthenticated,
+  function(req, res, next) {
+    if (req.user.can('company:approve')) {
+      return next()
+    }
+    // return error
+  },
+  
+  async (req, res, next)=> {
   const user = await models.User.findByPk(1);
-  console.log(await user.can("company:approve"))
+  if (await user.can("company:approve")) {
+    return next()
+  }
   return res.send("done");
   });
 
