@@ -36,6 +36,7 @@ const index = async (req,res,next) => {
         result.data=categoriesTransformer(categories);
         result.messages.push("You have all categories");
     }else {
+        res.status(422)
         result.success=false;
         result.messages.push()
     }

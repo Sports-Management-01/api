@@ -17,7 +17,7 @@ module.exports = {
       name: 'Meis',
       email: 'meis@gmail.com',
       password: '12345678',
-      phone: '+905555112345',
+      phone: '+905545112345',
       roleId: '1',
       createdAt: Sequelize.fn("now"),
       updatedAt: Sequelize.fn("now"),
