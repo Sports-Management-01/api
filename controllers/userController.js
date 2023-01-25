@@ -34,6 +34,37 @@ const store = async (req,res,next)=>{
       return res.send(result)
 };
 
+//LOGIN
+const login = async (req, res, next) => {
+  const result = {
+    success: true,
+    data: null,
+    messages: [],
+  };
+  const { email = "", password = "" } = req.body;
+  const user = await models.User.findOne({ where: { email } });
+  if (user) {
+    if (verifyPassword(password, user.password)) {
+      result.data = userTransformer(user);
+      result.messages.push("Loggen in successfully");
+      result.token = getToken({
+        id: user.id,
+        type: "user",
+      });
+    } else {
+      result.success = false;
+      result.messages.push("Invalid password!");
+      res.status(401);
+    }
+  } else {
+    result.success = false;
+    result.messages.push("Account not found you should register first!");
+    res.status(401);
+  }
+  return res.send(result);
+};
+//END LOGIN
 module.exports = {
-    store
+    store,
+    login
 }
