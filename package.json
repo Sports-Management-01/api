@@ -5,9 +5,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
-    "pretest": "cross-env NODE_ENV=test npm run migrate:reset",
-    "migrate:reset": "npx sequelize-cli db:migrate:undo:all && npm run migrate",
-    "migrate": "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
+    "migrate:reset": "cross-env NODE_ENV=test npx sequelize-cli db:migrate:undo:all && npm run migrate",
+    "migrate": "cross-env NODE_ENV=test npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -22,10 +21,10 @@
     "morgan": "~1.9.1",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.0.1",
-    "sequelize": "^6.28.0",
-    "sequelize-cli": "^6.5.2"
+    "sequelize": "^6.28.0"
   },
   "devDependencies": {
+    "sequelize-cli": "^6.5.2",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "cross-env": "^7.0.3",
