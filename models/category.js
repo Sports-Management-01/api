@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         as: "equipment"
       })
       Category.hasMany(models.Field, {
-        foreignKey: "categoryIdd"
+        foreignKey: "categoryId"
       })
     }
   }

@@ -13,11 +13,11 @@ const store = async (req,res,next)=>{
     const {to = ""}= req.body
     const {total = ""} = req.body
     
-    // if(!field.success){
-    //     result.success=false,
-    //     res.status(422);
-    //     result.messages.push("Please enter a valid fiedl id");
-    //   }
+    if(!field.success){
+        result.success=false,
+        res.status(422);
+        result.messages.push("Please enter a valid fiedl id");
+      }
       if(!user.success){
         result.success=false,
         res.status(422);
