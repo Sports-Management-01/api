@@ -31,7 +31,6 @@ module.exports = (sequelize, DataTypes) => {
     hourPrice: DataTypes.INTEGER,
     from: DataTypes.STRING, // 09:00
     to: DataTypes.STRING,
-    cityId: DataTypes.INTEGER,
     stateId: DataTypes.INTEGER,
     adress: DataTypes.STRING,
     latitude: DataTypes.DECIMAL,

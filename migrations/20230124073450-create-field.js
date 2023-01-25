@@ -42,6 +42,9 @@ module.exports = {
       longitude: {
         type: Sequelize.DECIMAL(11,8)
       },
+      image: {
+        type: Sequelize.STRING
+      },
       isActive: {
         type: Sequelize.BOOLEAN
       },
