@@ -5,14 +5,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
-<<<<<<< HEAD
-    "pretest": "cross-env NODE_ENV=test npm run migrate:reset",
     "migrate:reset": "cross-env NODE_ENV=test npx sequelize-cli db:migrate:undo:all && npm run migrate",
     "migrate": "cross-env NODE_ENV=test npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all --debug"
-=======
-    "migrate:reset": "cross-env NODE_ENV=test npx sequelize-cli db:migrate:undo:all && npm run migrate",
-    "migrate": "cross-env NODE_ENV=test npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
->>>>>>> 761c87ff869f36d130a5eef863b47afc05bb230a
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
