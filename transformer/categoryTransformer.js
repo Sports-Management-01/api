@@ -5,8 +5,8 @@ const categoryTransformer = (category) => {
     return category;
 };
 
-const categoriesTransformer = (categoreis) => {
-    return categoreis.map((category) => categoryTransformer(category))
+const categoriesTransformer = (categories) => {
+    return categories.map((category) => categoryTransformer(category))
 }
 
 module.exports = {
