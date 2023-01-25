@@ -7,7 +7,8 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var categoriesRouter = require('./routes/categories')
+var categoriesRouter = require('./routes/categories');
+var countriesRouter = require('./routes/countries')
 var reservationsRouter = require('./routes/reservations');
 var fieldsRouter = require('./routes/fields')
 
@@ -28,7 +29,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/categories', categoriesRouter)
+app.use('/categories', categoriesRouter);
+app.use('/countries', countriesRouter)
 app.use('/fields', fieldsRouter);
 app.use('/reservations', reservationsRouter)
 
