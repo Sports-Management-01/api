@@ -6,7 +6,7 @@ const permission = require('../models/permission');
 /* GET home page. */
 router.get(
   '/',
-  isAuthenticated,
+  // isAuthenticated,
   function(req, res, next) {
     if (req.user.can('company:approve')) {
       return next()
