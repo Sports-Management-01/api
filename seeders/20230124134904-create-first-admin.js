@@ -15,7 +15,7 @@ module.exports = {
    await queryInterface.bulkInsert('users', [
     {
       name: 'Meis',
-      email: 'meis@gmail.com',
+      email: 'meis01@gmail.com',
       password: '12345678',
       phone: '+905545112345',
       roleId: '1',
@@ -34,7 +34,7 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
     await queryInterface.bulkDelete('users', {
-      email: 'shafeeq@gmail.com'
+      email: 'meis@gmail.com'
     })
   }
 };
