@@ -15,9 +15,9 @@ module.exports = {
    await queryInterface.bulkInsert('users', [
     {
       name: 'Meis',
-      email: 'meis@gmail.com',
+      email: 'meis1@gmail.com',
       password: '12345678',
-      phone: '+905555112345',
+      phone: '+905555112355',
       roleId: '1',
       createdAt: Sequelize.fn("now"),
       updatedAt: Sequelize.fn("now"),
@@ -34,7 +34,7 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
     await queryInterface.bulkDelete('users', {
-      email: 'shafeeq@gmail.com'
+      email: 'meis@gmail.com'
     })
   }
 };

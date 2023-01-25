@@ -18,7 +18,7 @@ router.post(
   (req, res, next) => {
     upload(req, res, (err) => checkUpload(err, next));
   },
-  imageValdation,
+  //imageValdation,
   nameValidation,
   emailValidation,
   passwordValidation,
