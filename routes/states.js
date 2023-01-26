@@ -1,11 +1,13 @@
 var express= require('express');
-const { store, index, show, update, destroy } = require('../controllers/countryController');
+const { store,index, show } = require('../controllers/stateController');
 const { nameValidation } = require('../services/validationService');
-var router= express.Router()
+var router = express.Router();
 
 router.post('/', nameValidation ,store)
 router.get('/', index)
 router.get('/:id', show)
-router.put('/:id', nameValidation ,update)
-router.delete('/:id', destroy)
+// router.put('/:id', nameValidation ,update)
+// router.delete('/:id', destroy)
+
+
 module.exports = router

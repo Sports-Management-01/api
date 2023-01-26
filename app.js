@@ -9,10 +9,11 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var categoriesRouter = require('./routes/categories');
 var countriesRouter = require('./routes/countries');
+
 var equipmentsRouter = require('./routes/equipments')
 var reservationsRouter = require('./routes/reservations');
 var fieldsRouter = require('./routes/fields')
-
+var statesRouter = require('./routes/states')
 var app = express();
 
 // view engine setup
@@ -32,6 +33,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/categories', categoriesRouter);
 app.use('/countries', countriesRouter);
+app.use('/states', statesRouter)
 app.use('/equipments', equipmentsRouter);
 app.use('/fields', fieldsRouter);
 app.use('/reservations', reservationsRouter)
