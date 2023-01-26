@@ -9,6 +9,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER.UNSIGNED
       },
+      name: {
+        type: Sequelize.STRING,
+        unique: true
+      },
       companyId: {
         type: Sequelize.INTEGER.UNSIGNED
       },
