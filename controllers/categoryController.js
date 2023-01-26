@@ -2,25 +2,26 @@ const models = require('../models');
 const { getInstanceById } = require('../services/modelService');
 const { categoryTransformer, categoriesTransformer } = require('../transformer/categoryTransformer');
 
-const store = async (req,res,next)=>{
+const store = async (req, res, next) => {
     const result = {
         success: true,
         data: null,
         messages: [],
-      };
+    };
     const category = await models.Category.create({
         name: req.body.name,
         isActive: req.body.isActive,
         icon: req?.file?.filename
     });
 
-    if (category){
+    if (category) {
         result.data = categoryTransformer(category);
         result.messages.push('Category created successfully')
     } else {
         result.success = false;
         result.messages.push("Please try again later");
     }
+    res.sendStatus(422);
     return res.send(result);
 
 }
