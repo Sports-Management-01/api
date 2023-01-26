@@ -11,7 +11,8 @@ const userTransformer = (user)=>{
 
 const userTransformers = (users)=>{
     return users.map((user)=>{
-        userTransformer(user)
+        return userTransformer(user)
+        
     });
 };
 module.exports = 

@@ -1,4 +1,5 @@
-const models = require('../models')
+const models = require('../models');
+const { use } = require('../routes/users');
 const{getInstanceById} = require('../services/modelService');
 const {hashPassword, verifyPassword} = require('../services/passwordService')
 const {getToken, verifyToken} = require('../services/tokenService')
@@ -64,7 +65,88 @@ const login = async (req, res, next) => {
   return res.send(result);
 };
 //END LOGIN
+
+//Get All users
+const index = async(req,res,next)=>{
+  const result= {
+    success: true,
+    data:null,
+    messages:[],
+  };
+  const users = await models.User.findAll();
+  result.data =   userTransformers(users);
+  console.log(result.data);
+  return res.send(result);
+};
+// END Get All users
+
+//Get My profile
+const show = async(req,res,next)=>{
+const result = {
+  success:true,
+  data:null,
+  messages: [],
+};
+const user = await getInstanceById(req.params.id,"User");
+if(user.success){
+  result.data = userTransformer(user.instance.dataValues);
+}
+result.success = false;
+result.messages = [...user.messages];
+res.status(user.status);
+return res.send(result);
+}
+//END Get my profile
+
+//Update my profile
+const update = async (req,res,next) =>{
+  const result = {
+    success: true,
+    data:null,
+    messages:[]
+  };
+  const user = await getInstanceById(req.params.id,"User");
+  if(user.success){
+     await user.instance.update({
+      name: req.body.name,
+      email:req.body.email,
+      password: hashPassword(req.body.password),
+      phone: req.body.phone
+     });
+     result.data = userTransformer(user.instance);
+     result.messages.push("User updated successfully...");
+  }else{
+    result.messages = [...user.messages];
+    res.status(user.status);
+  }
+  return res.send(result)
+}
+//END
+
+//Delete user
+const destroy = async (req, res, next) => {
+  const result = {
+    success: true,
+    data: null,
+    messages: [],
+  };
+  const user = await getInstanceById(req.params.id, "User");
+  if (user.success) {
+    await user.instance.destroy();
+    result.messages.push("User deleted successfully");
+  } else {
+    res.status(user.status);
+    result.success = false;
+    result.messages = [...user.messages];
+  }
+  return res.send(result);
+};
+//END delete user
 module.exports = {
     store,
-    login
+    login,
+    index,
+    show,
+    update,
+    destroy
 }

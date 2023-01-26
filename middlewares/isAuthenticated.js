@@ -1,6 +1,6 @@
 const {verifyToken} = require('../services/tokenService')
 
-const isAuthenticated = (req,res,next)=>{
+const isAuthenticated = async(req,res,next)=>{
     const auth = req?.headers?.authorization
     if(!auth){
         res.status(401)
@@ -9,8 +9,8 @@ const isAuthenticated = (req,res,next)=>{
             messages:['Please provide a valid auth header']
         })
     }
-    const token = auth.split('')
-    const user = verifyToken(token[token.length-1])
+    const token = auth.split(' ')
+    const user = await verifyToken(token[token.length-1])
     if(user){
         req.user = user
         return next()
