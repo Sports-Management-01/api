@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { store } = require('../controllers/userController');
+const { store,login } = require('../controllers/userController');
 const multer = require("multer");
 const { storage, uploadFilter  } = require("../services/uploadService");
 const { nameValidation, emailValidation,  passwordValidation, imageValdation, checkUpload, errorResponse} = require("../services/validationService");
@@ -24,5 +24,10 @@ router.post(
   passwordValidation,
   store
 );
-
+//LOGIN
+router.post("/login", 
+  emailValidation, 
+  passwordValidation, 
+  login);
+//END LOGIN
 module.exports = router;
