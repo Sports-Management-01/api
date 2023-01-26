@@ -30,4 +30,9 @@ router.post("/login",
   passwordValidation, 
   login);
 //END LOGIN
+//GET all profiles
+// router.get("/", 
+//   isAuthenticated, (req, res, next) => 
+//   index);
+//END
 module.exports = router;

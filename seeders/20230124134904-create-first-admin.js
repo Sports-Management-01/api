@@ -15,9 +15,9 @@ module.exports = {
    await queryInterface.bulkInsert('users', [
     {
       name: 'Meis',
-      email: 'meis01@gmail.com',
+      email: 'meiss@gmail.com',
       password: '12345678',
-      phone: '+905545112345',
+      phone: '+905555712345',
       roleId: '1',
       createdAt: Sequelize.fn("now"),
       updatedAt: Sequelize.fn("now"),

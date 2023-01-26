@@ -2,7 +2,7 @@ const models = require('../models');
 const { getInstanceById } = require('../services/modelService');
 const { categoryTransformer, categoriesTransformer } = require('../transformer/categoryTransformer');
 
-const store = async (req,res,next)=>{
+const store = async (req, res, next) => {
     const result = {
         success: true,
         data: null,
@@ -27,6 +27,7 @@ const store = async (req,res,next)=>{
     result.success = false;
     result.messages.push("Category already available");
     }
+    res.sendStatus(422);
     return res.send(result);
 
 }
