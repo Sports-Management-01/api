@@ -1,10 +1,11 @@
 var express = require('express');
 var router = express.Router();
-const { store,login } = require('../controllers/userController');
+const { store,login, index,show,update,destroy } = require('../controllers/userController');
+const {isAuthenticated} = require("../middlewares/isAuthenticated");
 const multer = require("multer");
 const { storage, uploadFilter  } = require("../services/uploadService");
-const { nameValidation, emailValidation,  passwordValidation, imageValdation, checkUpload, errorResponse} = require("../services/validationService");
-
+const { phoneValdation,nameValidation, emailValidation,  passwordValidation, imageValdation, checkUpload, errorResponse} = require("../services/validationService");
+const sendError = require('../services/errorService')
 
 const upload = multer({
   storage: storage,
@@ -18,10 +19,11 @@ router.post(
   (req, res, next) => {
     upload(req, res, (err) => checkUpload(err, next));
   },
-  imageValdation,
+ // imageValdation,
   nameValidation,
   emailValidation,
   passwordValidation,
+  phoneValdation,
   store
 );
 //LOGIN
@@ -30,9 +32,54 @@ router.post("/login",
   passwordValidation, 
   login);
 //END LOGIN
-//GET all profiles
+//GET all users
 router.get("/", 
-  isAuthenticated, (req, res, next) => 
-  index);
+  isAuthenticated,
+  async(req, res, next) => {
+    if(await req.user.can('role:index')) {
+      console.log(req.user.can('role:index'))
+      return next()
+    }
+    return sendError(res,"You don't have persmission to continue",403)
+  },
+  index
+  );
 //END
+
+//Get my profile
+router.get(
+  "/:id",
+  isAuthenticated,
+  show
+);
+//END
+
+//Update my profile
+router.put(
+  "/:id",
+  isAuthenticated,
+ // (req, res, next) => { upload(req, res, (err) => checkUpload(err, next));},
+ // imageValdation,
+  nameValidation,
+  emailValidation,
+  passwordValidation,
+  phoneValdation,
+  update
+);
+//END update my profile
+
+//Delete user 
+router.delete(
+  "/:id",
+  isAuthenticated,
+  async(req, res, next) => {
+    if(await req.user.can('profile:delete')) {
+      console.log(req.user.can('profile:delete'))
+      return next()
+    }
+    return sendError(res,"You don't have persmission to continue",403)
+  },
+  destroy
+);
+//END Delete user
 module.exports = router;
