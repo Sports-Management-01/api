@@ -13,7 +13,8 @@ module.exports = {
         type: Sequelize.INTEGER.UNSIGNED
       },
       permission: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
       },
       allowed: {
         type: Sequelize.BOOLEAN,
