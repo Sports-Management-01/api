@@ -10,10 +10,10 @@ var usersRouter = require('./routes/users');
 var rolesRouter = require('./routes/roles');
 var categoriesRouter = require('./routes/categories');
 var countriesRouter = require('./routes/countries');
-
-var equipmentsRouter = require('./routes/equipments')
+var equipmentsRouter = require('./routes/equipments');
 var reservationsRouter = require('./routes/reservations');
-var fieldsRouter = require('./routes/fields')
+var paymentsRouter = require('./routes/payments')
+var fieldsRouter = require('./routes/fields');
 var statesRouter = require('./routes/states')
 var app = express();
 
@@ -39,7 +39,8 @@ app.use('/countries', countriesRouter);
 app.use('/states', statesRouter)
 app.use('/equipments', equipmentsRouter);
 app.use('/fields', fieldsRouter);
-app.use('/reservations', reservationsRouter)
+app.use('/reservations', reservationsRouter);
+app.use('/payments', paymentsRouter)
 
 
 // catch 404 and forward to error handler
