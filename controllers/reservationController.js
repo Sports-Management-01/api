@@ -1,47 +1,47 @@
 const models = require('../models');
 const { getInstanceById } = require('../services/modelService');
-
+const { Op } = require('sequelize');
+const { sequelize } = require('../models');
 const store = async (req,res,next)=>{
-    const result = {
-        success: true,
-        date: null,
-        messages: []
-    }
-    const field = await getInstanceById(req.body.fieldId, "Field")
-    const user = await getInstanceById(req.body.userId, "User")
-    const {from = ""} = req.body
-    const {to = ""}= req.body
-    const {total = ""} = req.body
-    
-    if(!field.success){
-        result.success=false,
-        res.status(422);
-        result.messages.push("Please enter a valid fiedl id");
-      }
-      if(!user.success){
-        result.success=false,
-        res.status(422);
-        result.messages.push("Please enter a valid user id");
-      }
-      if (!result.success) {
-        return res.send(result);
-      }
-      const [reservation, created] = await models.Reservation.findOrCreate({
-        fieldId : req.body.fieldId,
-        userId : req.body.userId,
+  const user = await models.User.findByPk(req.user.id)
+  const {fieldId, from, to, total } = req.body
+  const field = await getInstanceById(fieldId, "Field")
+  
+
+  console.log(field)
+  if(field.success)
+  {const [reservation, created]= await models.Reservation.findOrCreate({
+      where: {
+        userId: req.user.id,
+        fieldId,
         from,
         to,
+      
+        
+      },
+      defaults: {
         total
-      });
-      if(created){
-        result.data = reservation
-        result.messages.push('Reservation Created Successfully')
-      }else {
-        res.status(200);
-        result.success = false;
-        result.messages.push("You are already reserved");
       }
-      return res.send(result);
+    })
+    
+    if(created){
+      return res.send({
+        success: true,
+        messages: ['Reservation created successfuly']
+      })
+    }else {
+      return res.send({
+        success: false,
+        messages: ['You have already created a reservation to this field']
+      })
+
+    }
+  }
+  return res.send({
+    success: false,
+    messages: ['The field you are trying to add is invalid']
+  })
+
 }
 const index = async (req,res,next)=>{
     const result = {
@@ -61,29 +61,28 @@ const update = async (req, res, next) => {
       data: null,
       messages: [],
     };
-    const field = await getInstanceById(req.body.fieldId, "Field")
-    const user = await getInstanceById(req.body.userId, "User")
-    const {from = ""} = req.body
-    const {to = ""}= req.body
-    const {total = ""} = req.body
-    if (!field.success) {
-        item.status = 422;
-        result.messages.push("Please enter a valid field id");
-      } else if (!user.success) {
-        item.status = 422;
-        result.messages.push("Please enter a valid user id");
-      }
+    // const field = await getInstanceById(req.body.fieldId, "Field")
+    // const user = await models.User.findByPk(req.user.id)
+    const { from, to, total } = req.body
+    // if (!field.success) {
+    //     item.status = 422;
+    //     result.messages.push("Please enter a valid field id");
+    //   } else if (!user.success) {
+    //     item.status = 422;
+    //     result.messages.push("Please enter a valid user id");
+    //   }
       const item = await getInstanceById(req.params.id, "Reservation");
       if(item.success){
         await item.instance.update({
-            fieldId : req.body.fieldId,
-            userId : req.body.userId,
+            // fieldId,
+            // userId : req.user.id,
             from,
             to,
             total
         });
         result.data = item.instance
         result.messages.push('Reservation updated successfully')
+        return res.send(result)
       } else {
         result.messages = [...item.messages];
         res.status(item.status);
@@ -104,11 +103,30 @@ result.messages = [...item.messages]
     return res.send(result)
 
     }
+    const destroy = async(req,res,next)=>{
+      const result = {
+        success: true,
+        data: null,
+        messages: []
+    }
+    const item = await getInstanceById(req.params.id, "Reservation");
+    if(item.success){
+        await item.instance.destroy();
+        result.messages.push('Reservation deleted successfully');
+    } else {
+        res.status(item.status);
+        result.success = false;
+        result.messages = [...item.messages];
+      }
+      return res.send(result);
+
+    }
 
 module.exports = {
     store,
     index,
     update,
-    show
+    show,
+    destroy
 
 }

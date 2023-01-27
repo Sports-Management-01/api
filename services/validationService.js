@@ -91,6 +91,9 @@ const checkUpload = (err, next)=>{
           }),
         errorResponse,
       ];
+      const dateAfter = (date1, date2) => {
+        return date2 >= date1
+      }
 
       module.exports = {
         nameValidation,
@@ -99,5 +102,6 @@ const checkUpload = (err, next)=>{
         phoneValdation,
         imageValdation,
         checkUpload,
-        errorResponse
+        errorResponse,
+        dateAfter
       }
