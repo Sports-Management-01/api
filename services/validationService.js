@@ -91,6 +91,16 @@ const checkUpload = (err, next)=>{
           }),
         errorResponse,
       ];
+      const dateAfter = (date1, date2) => {
+        return date2 >= date1
+      }
+      const dateGreterFromNow = (date1)=>{
+        var currentDate = new Date()
+        if(date1 > currentDate){
+          alert('Given date is greater than the current date');
+        } return date1
+
+      }
 
       module.exports = {
         nameValidation,
@@ -99,5 +109,7 @@ const checkUpload = (err, next)=>{
         phoneValdation,
         imageValdation,
         checkUpload,
-        errorResponse
+        errorResponse,
+        dateAfter,
+        dateGreterFromNow
       }

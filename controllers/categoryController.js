@@ -27,7 +27,7 @@ const store = async (req, res, next) => {
     result.success = false;
     result.messages.push("Category already available");
     }
-    res.sendStatus(422);
+    res.status(422);
     return res.send(result);
 
 }

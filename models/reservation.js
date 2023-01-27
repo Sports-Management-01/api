@@ -30,8 +30,8 @@ module.exports = (sequelize, DataTypes) => {
   Reservation.init({
     fieldId: DataTypes.INTEGER,
     userId: DataTypes.INTEGER,
-    from: DataTypes.INTEGER,
-    to: DataTypes.INTEGER,
+    from: DataTypes.DATE,
+    to: DataTypes.DATE,
     total: DataTypes.INTEGER
   }, {
     sequelize,

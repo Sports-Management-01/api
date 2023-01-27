@@ -1,13 +1,15 @@
 var express= require('express');
-const { store, index, update, show } = require('../controllers/reservationController');
+const { store, index, update, show, destroy } = require('../controllers/reservationController');
+const { isAuthenticated } = require('../middlewares/isAuthenticated');
+const { dateGreterFromNow, dateAfter } = require('../services/validationService');
 var router= express.Router()
 
 
-router.post('/', store);
+router.post('/', isAuthenticated, dateGreterFromNow, dateAfter ,store);
 router.get('/', index);
 router.get('/:id', show);
-router.put('/:id', update);
-// router.delete('/:id', destroy);
+router.put('/:id', isAuthenticated ,update);
+router.delete('/:id', isAuthenticated ,destroy);
 
 
 
