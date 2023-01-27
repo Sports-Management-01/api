@@ -29,7 +29,7 @@ router.post(
 //LOGIN
 router.post("/login", 
   emailValidation, 
-  passwordValidation, 
+  //passwordValidation, 
   login);
 //END LOGIN
 //GET all users
