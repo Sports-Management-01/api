@@ -72,12 +72,68 @@ const index = async (req,res,next)=>{
         res.status(item.status);
         return res.send(result);
     }
+    
+        const update = async (req,res,next)=>{
+            const result = {
+                success: true,
+                data: null,
+                messages: []
+            }
+            const country = await getInstanceById(req.body.countryId, "Country")
+            if(country.success){const item = await getInstanceById(req.params.id, "State");
+            if(item.success){
+              if (item.instance.name != req.body.name) {
+                const newNameAlreadyUsed = await models.State.findOne({
+                    where: {name: req.body.name}
+                })
+                if(newNameAlreadyUsed){
+                    return res.send("This state is available in another country!")
+                }
+              }
+            await item.instance.update({
+                name: req.body.name,
+                countryId: req.body.countryId
+            });
+            result.data= item.instance
+            result.messages.push('State updated successfully');
+        }else {result.messages = [...item.messages];
+        res.status(item.status);
+        }
+        return res.send(result)
+    }else{
+        res.status(409);
+        result.success = false,
+        result.messages.push('The country Id not found')
+    }
+            
+        return res.send(result);
+        } 
+        const destroy = async (req,res,next)=> {
+            const result = {
+                success: true,
+                data: null,
+                messages: []
+            }
+            const item = await getInstanceById(req.params.id, "State");
+            if(item.success){
+                await item.instance.destroy();
+                result.messages.push('State deleted successfully');
+            } else {
+                res.status(item.status);
+                result.success = false;
+                result.messages = [...item.messages];
+              }
+              return res.send(result);
+        }
+    
 
 
 
 module.exports = {
     store,
     index,
-    show
+    show,
+    update,
+    destroy
 
 }

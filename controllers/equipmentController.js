@@ -80,7 +80,7 @@ const index = async (req,res,next)=>{
         await item.instance.update({
             name: req.body.name,
             price: req.body.price,
-            smultiple: req.body.multiple
+            multiple: req.body.multiple
         });
         result.data= item.instance
         result.messages.push('Equipment updated successfully');

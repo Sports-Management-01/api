@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Field.init({
+    name: DataTypes.STRING,
     companyId: DataTypes.INTEGER,
     categoryId: DataTypes.INTEGER,
     length: DataTypes.INTEGER,

@@ -1,5 +1,5 @@
 const models = require('../models');
-const { use } = require('../routes/users');
+// const { use } = require('../routes/users');
 const{getInstanceById} = require('../services/modelService');
 const {hashPassword, verifyPassword} = require('../services/passwordService')
 const {getToken, verifyToken} = require('../services/tokenService')
@@ -27,6 +27,7 @@ const store = async (req,res,next)=>{
       if(created){
         result.data = userTransformer(user)
         result.messages.push('User created successfully...')
+        
       }else{
         res.status(409)
         result.success = true;
