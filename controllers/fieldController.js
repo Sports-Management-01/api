@@ -15,7 +15,7 @@ const store = async (req,res,next)=>{
          name: req.body.name
         },
         defaults: {
-         companyId: req?.body?.companyId,
+         companyId: req?.user.id,
          categoryId: req.body.categoryId,
          length: req.body.length,
          width: req.body.width,
@@ -91,7 +91,6 @@ const update = async (req,res,next)=>{
       }
     await item.instance.update({
         name: req.body.name,
-        companyId: req?.body?.companyId,
          categoryId: req.body.categoryId,
          length: req.body.length,
          width: req.body.width,
@@ -118,10 +117,10 @@ const destroy = async (req,res,next)=> {
         data: null,
         messages: []
     }
-    const item = await getInstanceById(req.params.id, "Fiedl");
+    const item = await getInstanceById(req.params.id, "Field");
     if(item.success){
         await item.instance.destroy();
-        result.messages.push('Fiedl deleted successfully');
+        result.messages.push('Field deleted successfully');
     } else {
         res.status(item.status);
         result.success = false;
