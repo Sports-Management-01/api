@@ -1,9 +1,10 @@
 var express= require('express');
-const { store, index, update, show, destroy } = require('../controllers/reservationController');
+const { store, index, update, show, destroy, reservationEquipment } = require('../controllers/reservationController');
 const { isAuthenticated } = require('../middlewares/isAuthenticated');
 const { getNowdate, dateAfter, dateValidation, errorResponse } = require('../services/validationService');
 var router= express.Router()
-const { check } = require("express-validator");
+const { check, body } = require("express-validator");
+const { getInstanceById } = require('../services/modelService');
 
 
 
@@ -51,6 +52,16 @@ check('datesOrder', 'The end date should be after the start date')
 }),
 errorResponse ,update);
 router.delete('/:id', isAuthenticated ,destroy);
+router.post(
+    '/equipments',
+    // isAuthenticated,
+    body('equipmentId', 'Please enter a valid equipment id').custom(async value => {
+      const equipmentExists = await getInstanceById(value, 'Equipment')
+      return equipmentExists.success
+    }),
+    errorResponse,
+    reservationEquipment
+)
 
 
 
