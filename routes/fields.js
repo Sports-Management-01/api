@@ -1,4 +1,5 @@
 var express= require('express');
+const models = require('../models');
 const { store, index, show, update, destroy } = require('../controllers/fieldController');
 const { isAuthenticated } = require('../middlewares/isAuthenticated');
 const multer = require('multer');
@@ -99,5 +100,18 @@ router.get('/:id', show);
 router.put('/:id', update);
 router.delete('/:id', destroy);
 
+// Search Route
+router.get('/', (req, res, next) => {
+  const filters = req.query;
+  const filteredFields = models.Field.filter(field => {
+    let isValid = true;
+    for (key in filters) {
+      console.log(key, field[key], filters[key]);
+      isValid = isValid && field[key] == filters[key];
+    }
+    return isValid;
+  });
+  res.send(filteredFields);
+});
 
 module.exports = router
