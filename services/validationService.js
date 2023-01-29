@@ -94,13 +94,29 @@ const checkUpload = (err, next)=>{
       const dateAfter = (date1, date2) => {
         return date2 >= date1
       }
-      const dateGreterFromNow = (date1)=>{
-        var currentDate = new Date()
-        if(date1 > currentDate){
-          alert('Given date is greater than the current date');
-        } return date1
+      const getNowdate = (today)=>{
+         today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        var hh = today.getHours()
+        if (hh < 10) {
+          hh = '0' + hh
+        }
+        var min = today.curMinute = today.getMinutes() < 10 ? "0" + today.getMinutes() : today.getMinutes(); 
+        var sec = today.curSeconds = today.getSeconds() < 10 ? "0" + today.getSeconds() : today.getSeconds(),
+        today =  yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + min + ':' + sec;
+        console.log(today)
+        return today
+
 
       }
+
+      const dateValidation = (date) => {
+        return /^(?=\d)(?:(?:1[6-9]|[2-9]\d)?\d\d([-.\/])(?:1[012]|0?[1-9])\1(?:31(?<!.(?:0[2469]|11))|(?:30|29)(?<!.02)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$/.test(date)
+    // YYYY-MM-DD HH:MM:SS
+      }
+    
 
       module.exports = {
         nameValidation,
@@ -111,5 +127,6 @@ const checkUpload = (err, next)=>{
         checkUpload,
         errorResponse,
         dateAfter,
-        dateGreterFromNow
+        getNowdate,
+        dateValidation
       }

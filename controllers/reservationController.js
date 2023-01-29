@@ -6,8 +6,6 @@ const store = async (req,res,next)=>{
   const user = await models.User.findByPk(req.user.id)
   const {fieldId, from, to, total } = req.body
   const field = await getInstanceById(fieldId, "Field")
-  
-
   console.log(field)
   if(field.success)
   {const [reservation, created]= await models.Reservation.findOrCreate({
@@ -15,15 +13,12 @@ const store = async (req,res,next)=>{
         userId: req.user.id,
         fieldId,
         from,
-        to,
-      
-        
+        to, 
       },
       defaults: {
         total
       }
     })
-    
     if(created){
       return res.send({
         success: true,
@@ -34,14 +29,12 @@ const store = async (req,res,next)=>{
         success: false,
         messages: ['You have already created a reservation to this field']
       })
-
     }
   }
   return res.send({
     success: false,
     messages: ['The field you are trying to add is invalid']
   })
-
 }
 const index = async (req,res,next)=>{
     const result = {
@@ -50,7 +43,6 @@ const index = async (req,res,next)=>{
         messages: []
     }
     const reservations = await models.Reservation.findAll({
-
     })
     result.data=reservations
     return res.send(result)
@@ -101,7 +93,6 @@ if (item.success){
 result.messages = [...item.messages]
     res.status(item.status)
     return res.send(result)
-
     }
     const destroy = async(req,res,next)=>{
       const result = {
@@ -119,14 +110,44 @@ result.messages = [...item.messages]
         result.messages = [...item.messages];
       }
       return res.send(result);
-
     }
+const reservationEquipment = async(req,res)=>{
+    const equipment = await getInstanceById(req.body.equipmentId, "Equipment");
+    const reservation = await getInstanceById(req.body.reservationId, "Reservation");
+    const {count} = req.body
+    try{
+      if (equipment.success) {
+        const equAdded = await reservation.instance.addEquipment(req.body.equipmentId);
+        
+        if (equAdded) {
+          return res.send({
+            success: true,
+            messages: ["Equipment has been added to the reservation list"],
+          });
+        } else {
+          return res.send({
+            success: false,
+            messages: ["Could not add the equipment"],
+          });
+        }
+      }
+      return res.send({
+        success: false,
+        messages: "Errors invalid equipment Id",
+      });
+
+    }catch(error){
+      console.log(error)
+      return new Error(error)
+    }
+  };
 
 module.exports = {
     store,
     index,
     update,
     show,
-    destroy
+    destroy,
+    reservationEquipment
 
 }

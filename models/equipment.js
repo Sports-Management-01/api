@@ -12,12 +12,12 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Equipment.belongsToMany(models.Category, {
-        through: "CategoryEquipment",
+        through: "CategoryEquipments",
         foreignKey: "equipmentId",
         as: "category"
       })
       Equipment.belongsToMany(models.Reservation, {
-        through: "ReservationEquipment",
+        through: "ReservationEquipments",
         foreignKey: "equipmentId",
         as: "equipment"
       })

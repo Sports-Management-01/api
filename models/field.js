@@ -20,7 +20,9 @@ module.exports = (sequelize, DataTypes) => {
       Field.hasMany(models.Reservation, {
         foreignKey: "fieldId"
       })
-      
+      Field.hasMany(models.FieldImage, {
+        foreignKey: "fieldId"
+      })
     }
   }
   Field.init({
