@@ -76,14 +76,34 @@ const index = async(req,res,next)=>{
     data:null,
     messages:[],
   };
-  const users = await models.User.findAll();
-  result.data =   userTransformers(users);
-  console.log(result.data);
+  const roles = await models.Role.findAll();
+  result.data =  roles
+  console.log(roles);
   return res.send(result);
 };
 // END Get All Roles
+
+//Get My Role
+const show = async(req,res,next)=>{
+  const result = {
+    success:true,
+    data:null,
+    messages: [],
+  };
+  const role = await getInstanceById(req.params.id,"Role");
+  if(role.success){
+    result.data = role
+  }
+  result.success = false;
+  result.messages = [...role.messages];
+  res.status(role.status);
+  return res.send(result);
+  }
+  //END Get my Role
 module.exports = {
     store,
 update,
-destroy
+destroy,
+index,
+show
 }

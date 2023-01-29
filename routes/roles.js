@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-const { store, update, destroy } = require("../controllers/roleController");
+const { store, update, destroy,index, show } = require("../controllers/roleController");
 const { isAuthenticated } = require("../middlewares/isAuthenticated");
 const {
   nameValidation,
@@ -48,4 +48,31 @@ router.delete(
   destroy
 );
 //END Delete role
+//GET all roles
+router.get("/", 
+  isAuthenticated,
+  async(req, res, next) => {
+    if(await req.user.can('role:index')) {
+      console.log(req.user.can('role:index'))
+      return next()
+    }
+    return sendError(res,"You don't have persmission to continue",403)
+  },
+  index
+  );
+//END 
+//Get my role
+router.get(
+  "/:id",
+  isAuthenticated,
+  async(req, res, next) => {
+    if(await req.user.can('role:show')) {
+      console.log(req.user.can('role:show'))
+      return next()
+    }
+    return sendError(res,"You don't have persmission to continue",403)
+  },
+  show
+);
+//END
 module.exports = router;
