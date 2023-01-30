@@ -54,16 +54,16 @@ router.put('/:id', function (req, res, next) {
 body('name', 'Name length should be between 2 and 20').isLength({ min: 2, max: 20 }),
 checkErrors, update);
 router.delete('/:id', destroy);
-router.post(
-    '/equipments',
-    // isAuthenticated,
-    body('equipmentId', 'Please enter a valid equipment id').custom(async value => {
-      const equipmentExists = await getInstanceById(value, 'Equipment')
-      return equipmentExists.success
-    }),
-    errorResponse,
-    categoryEquipment
-)
+// router.post(
+//     '/equipments',
+//     // isAuthenticated,
+//     body('equipmentId', 'Please enter a valid equipment id').custom(async value => {
+//       const equipmentExists = await getInstanceById(value, 'Equipment')
+//       return equipmentExists.success
+//     }),
+//     errorResponse,
+//     categoryEquipment
+// )
 
 
 module.exports = router

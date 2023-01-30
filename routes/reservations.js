@@ -52,16 +52,16 @@ check('datesOrder', 'The end date should be after the start date')
 }),
 errorResponse ,update);
 router.delete('/:id', isAuthenticated ,destroy);
-router.post(
-    '/equipments',
-    // isAuthenticated,
-    body('equipmentId', 'Please enter a valid equipment id').custom(async value => {
-      const equipmentExists = await getInstanceById(value, 'Equipment')
-      return equipmentExists.success
-    }),
-    errorResponse,
-    reservationEquipment
-)
+// router.post(
+//     '/equipments',
+//     // isAuthenticated,
+//     body('equipmentId', 'Please enter a valid equipment id').custom(async value => {
+//       const equipmentExists = await getInstanceById(value, 'Equipment')
+//       return equipmentExists.success
+//     }),
+//     errorResponse,
+//     reservationEquipment
+// )
 
 
 

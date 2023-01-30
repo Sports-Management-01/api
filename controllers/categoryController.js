@@ -22,6 +22,7 @@ const store = async (req, res, next) => {
   });
 
   if (created) {
+    const equipments = await category.addEquipments(req.body.equipments)
     result.data = categoryTransformer(category);
     result.messages.push("Category created successfully");
   } else {
@@ -79,6 +80,7 @@ const update = async (req, res, next) => {
 
   const item = await getInstanceById(req.params.id, "Category");
   if (item.success) {
+    const equipments = await item.instance.setEquipments(req.body.equipments)
     result.success = true;
     const newData = {
       name,
@@ -113,33 +115,33 @@ const destroy = async (req, res, next) => {
   res.status(item.status);
   return res.send(result);
 };
-const categoryEquipment = async (req, res) => {
-  const equipment = await getInstanceById(req.body.equipmentId, "Equipment");
-  const category = await getInstanceById(req.body.categoryId, "Category");
-  if (category.success) {
-    const equAdded = await equipment.instance.addCategory(req.body.categoryId);
-    if (equAdded) {
-      return res.send({
-        success: true,
-        messages: ["Category has been added to the equipment list"],
-      });
-    } else {
-      return res.send({
-        success: false,
-        messages: ["Could not add the category"],
-      });
-    }
-  }
-  return res.send({
-    success: false,
-    messages: "Errors invalid cateogry Id",
-  });
-};
+// const categoryEquipment = async (req, res) => {
+//   const equipment = await getInstanceById(req.body.equipmentId, "Equipment");
+//   const category = await getInstanceById(req.body.categoryId, "Category");
+//   if (category.success) {
+//     const equAdded = await equipment.instance.addCategory(req.body.categoryId);
+//     if (equAdded) {
+//       return res.send({
+//         success: true,
+//         messages: ["Category has been added to the equipment list"],
+//       });
+//     } else {
+//       return res.send({
+//         success: false,
+//         messages: ["Could not add the category"],
+//       });
+//     }
+//   }
+//   return res.send({
+//     success: false,
+//     messages: "Errors invalid cateogry Id",
+//   });
+// };
 module.exports = {
   store,
   index,
   show,
   update,
-  destroy,
-  categoryEquipment,
+  destroy
+  // categoryEquipment,
 };
