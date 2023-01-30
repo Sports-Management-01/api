@@ -8,11 +8,23 @@ const store = async (req,res,next)=>{
         data: null,
         messages: [],
       };
-      
+      let images = [];
+// to see if files field exist
+if(req.files) {
+  // logic to save url in db
+  for (let i=0; i < req.files.length; i++) {
+    images.push(req.files[i])
+  }
+} 
+
+    /*   const imagesArr = [];
+      req.files.map((img)=>{imagesArr.push(img)})
+      console.log(imagesArr) */
       const [field, created] = await models.Field.findOrCreate({
         
         where: {
          name: req.body.name
+        
         },
         defaults: {
          companyId: req?.user?.id,
@@ -26,7 +38,7 @@ const store = async (req,res,next)=>{
          adress: req.body.adress,
          latitude: req.body.latitude,
          longitude: req.body.longitude,
-         image: req?.file?.filename,//we have to make loop on files to push all images into array after that covert aray to json json.stingyfy
+         image: req?.file?.filename,//JSON.stringify(images),//we have to make loop on files to push all images into array after that convert aray to json json.stingyfy
          isActive: req.body.isActive
         } 
      });
@@ -38,6 +50,7 @@ const store = async (req,res,next)=>{
         result.success = false,
         result.messages.push('Field already available')
     }
+    
     return res.send(result)
 }
 const index = async (req,res,next)=>{
