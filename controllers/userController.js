@@ -1,11 +1,5 @@
 const models = require('../models');
-<<<<<<< HEAD
-// const { use } = require('../routes/users');
-=======
 
-// const { use } = require('../routes/users');
-
->>>>>>> 101059e2274665cb2c5c55eaafc64a943d4fba5f
 const{getInstanceById} = require('../services/modelService');
 const {hashPassword, verifyPassword} = require('../services/passwordService')
 const {getToken, verifyToken} = require('../services/tokenService')

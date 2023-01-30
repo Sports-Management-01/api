@@ -7,6 +7,7 @@ const { body, check } = require('express-validator');
 const { storage, uploadFilter } = require('../services/uploadService');
 const Path = require('path');
 const checkErrors = require('../middlewares/checkErrors');
+const { timeValidation } = require('../services/validationService');
 var router= express.Router()
 
 var storages = multer.diskStorage({
@@ -70,7 +71,8 @@ function(req, res){
       res.end('Your files uploaded.');
       console.log('Yep yep!');
     });
-  },
+    
+  }, timeValidation,
 checkErrors,
 
   store);
@@ -101,17 +103,5 @@ router.put('/:id', update);
 router.delete('/:id', destroy);
 
 // Search Route
-router.get('/', (req, res, next) => {
-  const filters = req.query;
-  const filteredFields = models.Field.filter(field => {
-    let isValid = true;
-    for (key in filters) {
-      console.log(key, field[key], filters[key]);
-      isValid = isValid && field[key] == filters[key];
-    }
-    return isValid;
-  });
-  res.send(filteredFields);
-});
 
 module.exports = router
