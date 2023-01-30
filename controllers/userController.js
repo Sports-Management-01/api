@@ -1,4 +1,7 @@
 const models = require('../models');
+<<<<<<< HEAD
+// const { use } = require('../routes/users');
+=======
 
 // const { use } = require('../routes/users');
 
