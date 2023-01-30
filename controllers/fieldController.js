@@ -15,7 +15,7 @@ const store = async (req,res,next)=>{
          name: req.body.name
         },
         defaults: {
-         companyId: req?.user.id,
+         companyId: req?.user?.id,
          categoryId: req.body.categoryId,
          length: req.body.length,
          width: req.body.width,
@@ -26,7 +26,7 @@ const store = async (req,res,next)=>{
          adress: req.body.adress,
          latitude: req.body.latitude,
          longitude: req.body.longitude,
-         image: req?.file?.filename,
+         image: req?.file?.filename,//we have to make loop on files to push all images into array after that covert aray to json json.stingyfy
          isActive: req.body.isActive
         } 
      });

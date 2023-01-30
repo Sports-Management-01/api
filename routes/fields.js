@@ -9,90 +9,40 @@ const Path = require('path');
 const checkErrors = require('../middlewares/checkErrors');
 var router= express.Router()
 
-var storages = multer.diskStorage({
+     const upload = multer({
+        storage: storage,
+        fileFilter: uploadFilter('image'),
+        limits: {
+            fileSize: 1_000_000
+        }
+    }).array('image')
+let uploadErrors = " ";
 
 
-    destination: function (req, file, cb) {
-        cb(null, 'uploads')
-    },
-      filename: function(req, file, callback) {
-        console.log(file);
-        if(file.originalname.length>6)
-          callback(null, file.fieldname + '-' + Date.now() + file.originalname.substr(file.originalname.length-6,file.originalname.length));
-        else
-          callback(null, file.fieldname + '-' + Date.now() + file.originalname);
-    
+
+router.post('/', function (req, res, next) {
+  upload(req, res, function (err) {
+      if (err instanceof multer.MulterError) {
+          uploadErrors = err.message
+      } else if (err) {
+          uploadErrors = 'file is required to be an image'
       }
-    });
-    var upload = multer({storage: storage}).any('uploadedImages');
-    
-
-    
-    // const upload = multer({ storage: storages });
-//     const upload = multer({
-//         storage: storage,
-//         fileFilter: uploadFilter('image'),
-//         limits: {
-//             fileSize: 1_000_000
-//         }
-//     }).single('image')
-
-// router.post('/', 
-// upload.fields([ {
-//     name: 'image', maxCount: 5
-//   }]), function (req, res, next) {
-//     (req, res, function (err) {
-//         if (err instanceof multer.MulterError) {
-//             uploadErrors = err.message
-//         } else if (err) {
-//             uploadErrors = 'file is required to be an image'
-//         }
-//         return next()
-//     })
-// },
-// check('image').custom((value, { req }) => {
-//     if (req.file) {
-//         return true
-//     }
-//     return false
-// }).withMessage(function () {
-//     return `The icon is invalid: ${uploadErrors?.toLocaleLowerCase() || ''}`
-// }),
-// body('name', 'Name length should be between 2 and 20').isLength({ min: 2, max: 20 }),
-router.post('/',
-function(req, res){
-    upload(req, res, function(err){
-      if(err){
-        console.log(err);
-        return;
-      }
-      console.log(req.files);
-      res.end('Your files uploaded.');
-      console.log('Yep yep!');
-    });
-  },
+      return next()
+  })
+},
+check('image').custom((value, { req }) => {
+  if (req.file) {
+      return true
+  }
+  return false
+}).withMessage(function () {
+  return `The image is invalid: ${uploadErrors?.toLocaleLowerCase() || ''}`
+}),
+body('name', 'Name length should be between 2 and 20').isLength({ min: 2, max: 20 }),
 checkErrors,
+store)
 
-  store);
-
-//     req, res, function (err) {
-//         if (err instanceof multer.MulterError) {
-//             uploadErrors = err.message
-//         } else if (err) {
-//             uploadErrors = 'file is required to be an image'
-//         }
-//         return next()
-//     })
-// },
-// check('image').custom((value, { req }) => {
-//     if (req.file) {
-//         return true
-//     }
-//     return false
-// }).withMessage(function () {
-//     return `The image is invalid: ${uploadErrors?.toLocaleLowerCase() || ''}`
-// }),
-// body('name', 'Name length should be between 2 and 20').isLength({ min: 2, max: 20 }),
+//    
 
 
 router.get('/', index);
@@ -106,6 +56,7 @@ router.get('/', (req, res, next) => {
   const filteredFields = models.Field.filter(field => {
     let isValid = true;
     for (key in filters) {
+      
       console.log(key, field[key], filters[key]);
       isValid = isValid && field[key] == filters[key];
     }
