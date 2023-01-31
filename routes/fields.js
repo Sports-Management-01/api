@@ -21,7 +21,9 @@ let uploadErrors = " ";
 
 
 
-router.post('/', isAuthenticated ,function (req, res, next) {
+router.post('/',
+isAuthenticated,
+function (req, res, next) {
   upload(req, res, function (err) {
       if (err instanceof multer.MulterError) {
           uploadErrors = err.message

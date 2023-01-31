@@ -8,12 +8,6 @@ const { Op, QueryTypes } = require("sequelize");
 const { Sequelize } = require("sequelize");
 const { sequelize } = require("../models");
 
-const store = async (req, res, next) => {
-  const result = {
-    success: true,
-    data: null,
-    messages: [],
-  };
 
   const [field, created] = await models.Field.findOrCreate({
     where: {
@@ -42,7 +36,7 @@ const store = async (req, res, next) => {
     (result.success = false), result.messages.push("Field already available");
   }
   return res.send(result);
-};
+}
 const index = async (req, res, next) => {
   const result = {
     success: true,
@@ -83,7 +77,7 @@ const index = async (req, res, next) => {
     result.messages.push("No reservation This time is available");
   }
   return res.send(result);
-};
+}
 const show = async (req, res, next) => {
   const result = {
     success: true,
