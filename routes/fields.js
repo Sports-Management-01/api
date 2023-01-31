@@ -15,26 +15,25 @@ var router= express.Router()
         fileFilter: uploadFilter('image'),
         limits: {
             fileSize: 1_000_000
-        }
-    }).single('image')
+        } 
+    }).array('image')
 let uploadErrors = " ";
-
-
 
 router.post('/',
 isAuthenticated,
 function (req, res, next) {
   upload(req, res, function (err) {
-      if (err instanceof multer.MulterError) {
+     /*  if (err instanceof multer.MulterError) {
           uploadErrors = err.message
       } else if (err) {
           uploadErrors = 'file is required to be an image'
-      }
+      } */
       return next()
   })
 },
 check('image').custom((value, { req }) => {
-  if (req.file) {
+  if (req.files) {
+    console.log(req.files)
       return true
   }
   return false

@@ -8,47 +8,48 @@ const { Op, QueryTypes } = require("sequelize");
 const { Sequelize } = require("sequelize");
 const { sequelize } = require("../models");
 
-
-
-
-const store = async (req,res,next)=>{
+const store = async (req, res, next) => {
   const result = {
-      success: true,
-      data: null,
-      messages: [],
-    };
-    
-    const [field, created] = await models.Field.findOrCreate({
-      
-      where: {
-       name: req.body.name
-      },
-      defaults: {
-       companyId: req?.user?.id,
-       categoryId: req.body.categoryId,
-       length: req.body.length,
-       width: req.body.width,
-       hourPrice: req.body.hourPrice,
-       from: req.body.from,
-       to: req.body.to,
-       stateId: req.body.stateId,
-       adress: req.body.adress,
-       latitude: req.body.latitude,
-       longitude: req.body.longitude,
-       image: req?.file?.filename,//we have to make loop on files to push all images into array after that covert aray to json json.stingyfy
-       isActive: req.body.isActive
-      } 
-   });
-   if(created){
-      result.data= field,
-      result.messages.push('Field created successfully')
-  }else{
-      res.status(409);
-      result.success = false,
-      result.messages.push('Field already available')
+    success: true,
+    data: null,
+    messages: [],
+  };
+  let imagesArr = [];
+  // to see if files field exist
+  if (req.files) {
+    for (let i = 0; i < req.files.length; i++) {
+      imagesArr.push(req.files[i].filename);
+    }
+    console.log(imagesArr)
   }
-  return res.send(result)
-}
+  const [field, created] = await models.Field.findOrCreate({
+    where: {
+      name: req.body.name,
+    },
+    defaults: {
+      companyId: req?.user?.id,
+      categoryId: req.body.categoryId,
+      length: req.body.length,
+      width: req.body.width,
+      hourPrice: req.body.hourPrice,
+      from: req.body.from,
+      to: req.body.to,
+      stateId: req.body.stateId,
+      adress: req.body.adress,
+      latitude: req.body.latitude,
+      longitude: req.body.longitude,
+      image: JSON.stringify(imagesArr), //we have to make loop on files to push all images into array after that covert aray to json json.stingyfy
+      isActive: req.body.isActive,
+    },
+  });
+  if (created) {
+    (result.data = field), result.messages.push("Field created successfully");
+  } else {
+    res.status(409);
+    (result.success = false), result.messages.push("Field already available");
+  }
+  return res.send(result);
+};
 const index = async (req, res, next) => {
   const result = {
     success: true,
@@ -77,7 +78,7 @@ const index = async (req, res, next) => {
       }
     }
   }
-  fieldQuery += " AND `fields`.`deletedAt` IS NULL AND `fields`.`isActive`=1"
+  fieldQuery += " AND `fields`.`deletedAt` IS NULL AND `fields`.`isActive`=1";
 
   const [fields, metadata] = await sequelize.query(fieldQuery);
   if (fields.length > 0) {
@@ -89,7 +90,7 @@ const index = async (req, res, next) => {
     result.messages.push("No reservation This time is available");
   }
   return res.send(result);
-}
+};
 const show = async (req, res, next) => {
   const result = {
     success: true,
