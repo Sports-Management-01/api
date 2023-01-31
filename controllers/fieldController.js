@@ -4,8 +4,9 @@ const {
   timeValidation,
   dateValidation,
 } = require("../services/validationService");
-const { Op } = require("sequelize");
+const { Op, QueryTypes } = require("sequelize");
 const { Sequelize } = require("sequelize");
+const { sequelize } = require("../models");
 
 const store = async (req, res, next) => {
   const result = {
@@ -50,56 +51,29 @@ const index = async (req, res, next) => {
   };
   const filter = {};
   const relations = [];
-  const datetime = req.query.date + " " + req.query.time + ":00";
-  if (req.query.category && req.query.time) {
-    filter.categoryId = req?.query?.category;
-    if (req.query?.time) {
-      if (timeValidation(req.query.time)) {
-        filter.from = {
-          [Op.lte]: req.query.time,
-        };
-        filter.to = {
-          [Op.gte]: req.query.time,
-        };
-        if (dateValidation(req.query.date)) {
-          relations.push({
-            model: models.Reservation,
-            where: {
-              [Op.and]: [
-                {
-                  from: {
-                    [Op.lt]: datetime,
-                  },
-                },
-                {
-                  to: {
-                    [Op.gt]: datetime,
-                  },
-                },
-              ],
-            },
-          });
+  let fieldQuery = "SELECT * FROM fields where 1=1 ";
 
-          // filter["$Reservations.id$"] = null
-          // filter = Sequelize.and({
-          //     Sequelize.where(Sequelize.col('Reservation.id'),Op.is, null),
-          //     ...filter
-          // })
-        }
+  if (req.query?.category) {
+    fieldQuery += " and `fields`.`categoryId` =" + req?.query?.category;
+  }
+  if (req.query?.time) {
+    if (timeValidation(req.query.time)) {
+      fieldQuery += " and `fields`.`from` <= '" + req.query.time + "'";
+      fieldQuery += " and `fields`.`to` > '" + req.query.time + "'";
+      if (dateValidation(req.query?.date)) {
+        const datetime = req.query.date + " " + req.query.time + ":00";
+        fieldQuery +=
+          " AND NOT EXISTS(SELECT * FROM `reservations` WHERE `fields`.`id` = `reservations`.`fieldId` AND (`from` <= '" +
+          datetime +
+          "' AND `to` > '" +
+          datetime +
+          "'))";
       }
-    } else {
-      res.status(422);
-      result.success = false;
-      result.messages.push("Time is invalid");
-      return res.send(result);
     }
   }
+  fieldQuery += " AND `fields`.`deletedAt` IS NULL AND `fields`.`isActive`=1"
 
-  const fields = await models.Field.findAll({
-    include: relations,
-    where: filter,
-  });
-
+  const [fields, metadata] = await sequelize.query(fieldQuery);
   if (fields.length > 0) {
     result.data = fields;
     result.messages.push("You have all fields");
