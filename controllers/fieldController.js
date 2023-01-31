@@ -20,6 +20,7 @@ const store = async (req, res, next) => {
     for (let i = 0; i < req.files.length; i++) {
       imagesArr.push(req.files[i].filename);
     }
+
     console.log(imagesArr)
   }
   const [field, created] = await models.Field.findOrCreate({
@@ -56,8 +57,7 @@ const index = async (req, res, next) => {
     data: null,
     messages: [],
   };
-  const filter = {};
-  const relations = [];
+ 
   let fieldQuery = "SELECT * FROM fields where 1=1 ";
 
   if (req.query?.category) {
@@ -111,6 +111,7 @@ const update = async (req, res, next) => {
     data: null,
     messages: [],
   };
+ 
   const item = await getInstanceById(req.params.id, "Field");
   if (item.success) {
     if (item.instance.name != req.body.name) {
@@ -121,21 +122,35 @@ const update = async (req, res, next) => {
         return res.send("new name is already token");
       }
     }
-    await item.instance.update({
-      name: req.body.name,
-      categoryId: req.body.categoryId,
-      length: req.body.length,
-      width: req.body.width,
-      hourPrice: req.body.hourPrice,
-      from: req.body.from,
-      to: req.body.to,
-      stateId: req.body.stateId,
-      adress: req.body.adress,
-      latitude: req.body.latitude,
-      longitude: req.body.longitude,
-      image: req?.file?.filename,
-      isActive: req.body.isActive,
-    });
+
+   const  newData = {
+    name: req.body.name,
+    categoryId: req.body.categoryId,
+    length: req.body.length,
+    width: req.body.width,
+    hourPrice: req.body.hourPrice,
+    from: req.body.from,
+    to: req.body.to,
+    stateId: req.body.stateId,
+    adress: req.body.adress,
+    latitude: req.body.latitude,
+    longitude: req.body.longitude,
+   
+    isActive: req.body.isActive,
+   }
+   let imagesArr = [];
+    if (req.files) {
+      
+   const image = item.instance.image;
+      for (let i = 0; i < req.files.length; i++) {
+        imagesArr.push(req.files[i].filename);
+      }
+      console.log(imagesArr)
+      newData.image = JSON.stringify([...imagesArr, ...JSON.parse(image)])
+    }
+
+  console.log(`newData.image: ${newData.image }`)
+    await item.instance.update(newData);
     result.data = item.instance;
     result.messages.push("Field updated successfully");
   } else {

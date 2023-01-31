@@ -23,11 +23,11 @@ router.post('/',
 isAuthenticated,
 function (req, res, next) {
   upload(req, res, function (err) {
-     /*  if (err instanceof multer.MulterError) {
+      if (err instanceof multer.MulterError) {
           uploadErrors = err.message
       } else if (err) {
           uploadErrors = 'file is required to be an image'
-      } */
+      } 
       return next()
   })
 },
@@ -47,7 +47,28 @@ store);
 
 router.get('/', index);
 router.get('/:id', show);
-router.put('/:id', update);
+router.put('/:id', 
+isAuthenticated,
+function (req, res, next) {
+  upload(req, res, function (err) {
+      if (err instanceof multer.MulterError) {
+          uploadErrors = err.message
+      } else if (err) {
+          uploadErrors = 'file is required to be an image'
+      } 
+      return next()
+  })
+},
+check('image').custom((value, { req }) => {
+  if (req.files) {
+    console.log(req.files)
+      return true
+  }
+  return false
+}).withMessage(function () {
+  return `The image is invalid: ${uploadErrors?.toLocaleLowerCase() || ''}`
+}),
+update);
 router.delete('/:id', destroy);
 
 // Search Route
