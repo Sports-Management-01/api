@@ -7,8 +7,7 @@ const {
 const { Op } = require("sequelize");
 const { Sequelize } = require("sequelize");
 
-const models = require('../models');
-const { getInstanceById } = require('../services/modelService');
+
 
 const store = async (req,res,next)=>{
     const result = {
@@ -54,9 +53,9 @@ const index = async (req,res,next)=>{
         data: null,
         messages: []
     }
-  }
+  
 
-  const fields = await models.Field.findAll({
+  const fields =  models.Field.findAll({
     include: relations,
     where: filter,
   });
@@ -70,7 +69,7 @@ const index = async (req,res,next)=>{
     result.messages.push("No reservation This time is available");
   }
   return res.send(result);
-};
+}
 const show = async (req, res, next) => {
   const result = {
     success: true,
