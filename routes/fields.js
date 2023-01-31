@@ -16,26 +16,31 @@ var router= express.Router()
         limits: {
             fileSize: 1_000_000
         }
-    }).array('image')
+    }).single('image')
 let uploadErrors = " ";
 
 
 
-router.post('/', function (req, res, next) {
+router.post('/', isAuthenticated ,function (req, res, next) {
   upload(req, res, function (err) {
       if (err instanceof multer.MulterError) {
           uploadErrors = err.message
       } else if (err) {
           uploadErrors = 'file is required to be an image'
       }
-      console.log(req.files);
-      res.end('Your files uploaded.');
-      console.log('Yep yep!');
-    });
-  },
+      return next()
+  })
+},
+check('image').custom((value, { req }) => {
+  if (req.file) {
+      return true
+  }
+  return false
+}).withMessage(function () {
+  return `The image is invalid: ${uploadErrors?.toLocaleLowerCase() || ''}`
+}),
 checkErrors,
-store)
-
+store);
 //    
 
 
@@ -45,18 +50,6 @@ router.put('/:id', update);
 router.delete('/:id', destroy);
 
 // Search Route
-router.get('/', (req, res, next) => {
-  const filters = req.query;
-  const filteredFields = models.Field.filter(field => {
-    let isValid = true;
-    for (key in filters) {
-      
-      console.log(key, field[key], filters[key]);
-      isValid = isValid && field[key] == filters[key];
-    }
-    return isValid;
-  });
-  res.send(filteredFields);
-});
+
 
 module.exports = router
