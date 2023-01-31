@@ -8,6 +8,8 @@ const { storage, uploadFilter } = require('../services/uploadService');
 const Path = require('path');
 const checkErrors = require('../middlewares/checkErrors');
 const { timeValidation } = require('../services/validationService');
+const isAuthorized = require('../services/isAuthorized');
+const sendError = require('../services/errorService');
 var router= express.Router()
 
      const upload = multer({
@@ -49,6 +51,18 @@ router.get('/', index);
 router.get('/:id', show);
 router.put('/:id', 
 isAuthenticated,
+async(req, res, next) => {
+  if(await req.user.can('field:update')) {
+    console.log(req.user.can('field:update'))
+    return next()
+  }
+  return sendError(res,"You don't have persmission to continue",403)
+},
+(req, res, next) =>
+isAuthorized(req, res, next, {
+  
+  
+}),
 function (req, res, next) {
   upload(req, res, function (err) {
       if (err instanceof multer.MulterError) {

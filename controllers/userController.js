@@ -54,7 +54,7 @@ const login = async (req, res, next) => {
       result.messages.push("Loggen in successfully");
       result.token = getToken({
         id: user.id,
-        type: "user",
+        roleId: user.roleId,
       });
     } else {
       result.success = false;

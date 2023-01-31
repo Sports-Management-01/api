@@ -15,6 +15,7 @@ var reservationsRouter = require('./routes/reservations');
 var paymentsRouter = require('./routes/payments')
 var fieldsRouter = require('./routes/fields');
 var statesRouter = require('./routes/states')
+var permissionsRouter = require('./routes/permissions')
 var app = express();
 
 // view engine setup
@@ -41,7 +42,7 @@ app.use('/equipments', equipmentsRouter);
 app.use('/fields', fieldsRouter);
 app.use('/reservations', reservationsRouter);
 app.use('/payments', paymentsRouter)
-
+app.use('/permissions', permissionsRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

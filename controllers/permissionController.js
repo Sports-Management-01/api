@@ -12,11 +12,12 @@ const store = async (req,res,next)=>{
       const [permission, created] = await models.Permission.findOrCreate({
         
         where: {
-         name: req.body.name
+            permission: req.body.permission,
+            roleId: req.body.roleId,
         },
         defaults: {
-         roleId: req.body.categoryId,
-         permission: req.body.permission,
+       
+         
          allowed: req.body.allowed
         } 
      });
@@ -71,18 +72,10 @@ const update = async (req,res,next)=>{
     }
     const item = await getInstanceById(req.params.id, "Permission");
     if(item.success){
-      if (item.instance.name != req.body.name) {
-        const newNameAlreadyUsed = await models.Permission.findOne({
-            where: {name: req.body.name}
-        })
-        if(newNameAlreadyUsed){
-            return res.send("new name is already token")
-        }
-      }
+    
     await item.instance.update({
-        name: req.body.name,
+        permission: req.body.permission,
          roleId: req.body.roleId,
-         persmission: req.body.permission,
          allowed: req.body.allowed
     });
     result.data= item.instance
