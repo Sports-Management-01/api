@@ -1,7 +1,7 @@
 var bcrypt = require('bcryptjs');
 
 const hashPassword = (password)=>{
-    return bcrypt.hashSync(password,10)
+    return bcrypt.hashSync(password, 10)
 }
 
 const verifyPassword = (original,hashed)=>{

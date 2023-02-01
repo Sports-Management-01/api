@@ -11,7 +11,7 @@ const upload = multer({
   storage: storage,
   fileFilter: uploadFilter("image"),
   limits: { fileSize: 1_000_000 },
-}).single("image");
+});
 
 /* GET users listing. */
 router.post(
