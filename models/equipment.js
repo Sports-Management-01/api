@@ -16,11 +16,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "equipmentId",
         as: "category"
       })
-      Equipment.belongsToMany(models.Reservation, {
-        through: "ReservationEquipments",
+      Equipment.hasMany(models.ReservationEquipment, {
         foreignKey: "equipmentId",
-        as: "equipment"
       })
+      
     }
   }
   Equipment.init({
