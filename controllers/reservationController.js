@@ -2,9 +2,10 @@ const models = require('../models');
 const { getInstanceById } = require('../services/modelService');
 const { Op } = require('sequelize');
 const { sequelize } = require('../models');
+const { reservationTotalCost } = require('../utils/functions');
 const store = async (req,res,next)=>{
   const user = await models.User.findByPk(req.user.id)
-  const {fieldId, from, to, total } = req.body
+  const {fieldId, from, to, equipments } = req.body
   const field = await getInstanceById(fieldId, "Field")
   if(field.success)
   {const [reservation, created]= await models.Reservation.findOrCreate({
@@ -15,7 +16,7 @@ const store = async (req,res,next)=>{
         to, 
       },
       defaults: {
-        total
+        total : await reservationTotalCost(fieldId, from,to, equipments) 
       }
     })
     if(created){
@@ -78,7 +79,7 @@ const update = async (req, res, next) => {
     //   }
       const item = await getInstanceById(req.params.id, "Reservation");
       if(item.success){
-       
+        const { equipments } = req.body
         await models.ReservationEquipment.destroy({ where: { reservationId: [item.instance.id] }})
         if (Array.isArray(req.body.equipments)) {
           req.body.equipments.forEach(async (eq) => {
@@ -93,6 +94,9 @@ const update = async (req, res, next) => {
               }
             })}) 
           }
+          await item.instance.update({
+            total : await reservationTotalCost(item.instance.fieldId, item.instance.from,item.instance.to, equipments)  
+        });
         result.data = item.instance
         result.messages.push('Reservation updated successfully')
         return res.send(result)

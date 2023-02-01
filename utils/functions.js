@@ -1,11 +1,11 @@
 const models = require('../models')
 const dayjs = require('dayjs')
 
-const reservationTotalCost = async (reservation, equipments = [])=>{
-    const field = await models.Field.findByPk(reservation.fieldId)
-    const from = dayjs(reservation.from)
-    const to = dayjs(reservation.to)
-    const duration = to.diff(from, 'h')
+const reservationTotalCost = async (fieldId, from, to, equipments = [])=>{
+    const field = await models.Field.findByPk(fieldId)
+    const start = dayjs(from)
+    const end = dayjs(to)
+    const duration = end.diff(start, 'h')
     const fieldCost = duration * field.hourPrice
     let eqCost = 0
     for (const eq of equipments) {
