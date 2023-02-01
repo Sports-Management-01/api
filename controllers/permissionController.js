@@ -55,7 +55,7 @@ const show = async (req,res,next)=>{
         data: null,
         messages: []
     }
-    const item = await getInstanceById(req.params.id, "Persmission");
+    const item = await getInstanceById(req.params.id, "Permission");
     if(item.success){
         result.success = true,
         result.data = item.instance.dataValues

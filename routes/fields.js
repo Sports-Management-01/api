@@ -56,7 +56,7 @@ async(req, res, next) => {
     console.log(req.user.can('field:update'))
     return next()
   }
-  return sendError(res,"You don't have persmission to continue",403)
+  return sendError(res,"You don't have permission to continue",403)
 },
 (req, res, next) =>
 isAuthorized(req, res, next, {

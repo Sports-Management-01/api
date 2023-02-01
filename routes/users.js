@@ -40,7 +40,7 @@ router.get("/",
       console.log(req.user.can('role:index'))
       return next()
     }
-    return sendError(res,"You don't have persmission to continue",403)
+    return sendError(res,"You don't have permission to continue",403)
   },
   index
   );
@@ -77,7 +77,7 @@ router.delete(
       console.log(req.user.can('profile:delete'))
       return next()
     }
-    return sendError(res,"You don't have persmission to continue",403)
+    return sendError(res,"You don't have permission to continue",403)
   },
   destroy
 );

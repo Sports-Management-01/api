@@ -14,10 +14,8 @@ module.exports = (sequelize, DataTypes) => {
       Reservation.belongsTo(models.User, {
         foreignKey: 'userId'
       })
-      Reservation.belongsToMany(models.Equipment, {
-        through: "ReservationEquipments",
+      Reservation.hasMany(models.ReservationEquipment, {
         foreignKey: "reservationId",
-        as: "equipments"
       })
       Reservation.belongsTo(models.Field, {
         foreignKey: 'fieldId'

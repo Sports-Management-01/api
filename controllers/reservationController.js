@@ -20,7 +20,20 @@ const store = async (req,res,next)=>{
       }
     })
     if(created){
-      const equipments = await reservation.addEquipments(req.body.equipments) 
+      if (Array.isArray(req.body.equipments)) {
+        req.body.equipments.forEach(async (eq) => {
+          const [equipments, created] = await models.ReservationEquipment.findOrCreate ({
+            where: {
+              reservationId: reservation.id,
+              equipmentId: eq.id
+
+            },
+            defaults:{
+              count: eq.count
+            }
+          })}) 
+        }
+      
       return res.send({
         success: true,
         messages: ['Reservation created successfuly']
@@ -66,14 +79,21 @@ const update = async (req, res, next) => {
     //   }
       const item = await getInstanceById(req.params.id, "Reservation");
       if(item.success){
-        await item.instance.update({
-            // fieldId,
-            // userId : req.user.id,
-            from,
-            to,
-            total
-        });
-        const equipments = await item.instance.setEquipments(req.body.equipments)
+       
+        await models.ReservationEquipment.destroy({ where: { reservationId: [item.instance.id] }})
+        if (Array.isArray(req.body.equipments)) {
+          req.body.equipments.forEach(async (eq) => {
+            const [equipments, created] = await models.ReservationEquipment.findOrCreate ({
+              where: {
+                reservationId: item.instance.id,
+                equipmentId: eq.id
+  
+              },
+              defaults:{
+                count: eq.count
+              }
+            })}) 
+          }
         result.data = item.instance
         result.messages.push('Reservation updated successfully')
         return res.send(result)
