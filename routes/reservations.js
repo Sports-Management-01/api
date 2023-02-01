@@ -5,6 +5,7 @@ const { getNowdate, dateAfter, dateValidation, errorResponse } = require('../ser
 var router= express.Router()
 const { check, body } = require("express-validator");
 const { getInstanceById } = require('../services/modelService');
+const isReservationOwner = require('../services/isReservationOwner');
  
 
 router.post('/', isAuthenticated, 
@@ -30,7 +31,10 @@ check('datesOrder', 'The end date should be after the start date')
 errorResponse ,store);
 router.get('/', index);
 router.get('/:id', show);
-router.put('/:id', isAuthenticated, check('from', 'Start date should match the YYYY-MM-DD syntaxt').custom((value) => {
+router.put('/:id', 
+isAuthenticated, 
+isReservationOwner,
+check('from', 'Start date should match the YYYY-MM-DD syntaxt').custom((value) => {
     return dateValidation(value)
 }),
 check('to', 'End date should match the YYYY-MM-DD syntaxt').custom((value) => {

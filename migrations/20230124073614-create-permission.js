@@ -14,7 +14,7 @@ module.exports = {
       },
       permission: {
         type: Sequelize.STRING,
-        unique: true
+        unique: false
       },
       allowed: {
         type: Sequelize.BOOLEAN,

@@ -8,7 +8,7 @@ const { storage, uploadFilter } = require('../services/uploadService');
 const Path = require('path');
 const checkErrors = require('../middlewares/checkErrors');
 const { timeValidation } = require('../services/validationService');
-const isAuthorized = require('../services/isAuthorized');
+const isFieldOwner = require('../services/isFieldOwner');
 const sendError = require('../services/errorService');
 var router= express.Router()
 
@@ -58,11 +58,7 @@ async(req, res, next) => {
   }
   return sendError(res,"You don't have permission to continue",403)
 },
-(req, res, next) =>
-isAuthorized(req, res, next, {
-  
-  
-}),
+isFieldOwner,
 function (req, res, next) {
   upload(req, res, function (err) {
       if (err instanceof multer.MulterError) {
