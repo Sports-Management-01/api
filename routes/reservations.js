@@ -1,10 +1,9 @@
 var express= require('express');
-const { store, index, update, show, destroy, reservationEquipment } = require('../controllers/reservationController');
+const { store, index, update, show, destroy } = require('../controllers/reservationController');
 const { isAuthenticated } = require('../middlewares/isAuthenticated');
 const { getNowdate, dateAfter, dateValidation, errorResponse } = require('../services/validationService');
 var router= express.Router()
-const { check, body } = require("express-validator");
-const { getInstanceById } = require('../services/modelService');
+const { check } = require("express-validator");
 
 
 
