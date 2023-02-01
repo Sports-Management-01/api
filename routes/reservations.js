@@ -5,8 +5,7 @@ const { getNowdate, dateAfter, dateValidation, errorResponse } = require('../ser
 var router= express.Router()
 const { check, body } = require("express-validator");
 const { getInstanceById } = require('../services/modelService');
-
-
+ 
 
 router.post('/', isAuthenticated, 
  check('from', 'Start date should match the YYYY-MM-DD syntaxt').custom((value) => {
