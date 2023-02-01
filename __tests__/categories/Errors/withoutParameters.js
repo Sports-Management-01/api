@@ -1,11 +1,12 @@
 const request = require("supertest");
 const app = require("../../../app");
+const testVariables = require("../../testVariables");
 
 describe("Categories Tests", () => {
   test("Does not accept empty parameters", (done) => {
     request(app)
       .post("/categories")
-      .set('Authorization', 'Bearer ')
+      .set('Authorization', 'Bearer ' + testVariables.userToken)
       .then(response => {
         expect(response.body).toHaveProperty('success')
         expect(response.body.success).toBe(false);

@@ -18,27 +18,28 @@ const upload = multer({
 }).single('icon')
 
 let uploadErrors = ''
-router.post('/', function (req, res, next) {
-    upload(req, res, function (err) {
-        if (err instanceof multer.MulterError) {
-            uploadErrors = err.message
-        } else if (err) {
-            uploadErrors = 'file is required to be an image'
+router.post('/',
+    function (req, res, next) {
+        upload(req, res, function (err) {
+            if (err instanceof multer.MulterError) {
+                uploadErrors = err.message
+            } else if (err) {
+                uploadErrors = 'file is required to be an image'
+            }
+            return next()
+        })
+    },
+    check('icon').custom((value, { req }) => {
+        if (req.file) {
+            return true
         }
-        return next()
-    })
-},
-check('icon').custom((value, { req }) => {
-    if (req.file) {
-        return true
-    }
-    return false
-}).withMessage(function () {
-    return `The icon is invalid: ${uploadErrors?.toLocaleLowerCase() || ''}`
-}),
-body('name', 'Name length should be between 2 and 20').isLength({ min: 2, max: 20 }),
-checkErrors,
-store);
+        return false
+    }).withMessage(function () {
+        return `The icon is invalid: ${uploadErrors?.toLocaleLowerCase() || ''}`
+    }),
+    body('name', 'Name length should be between 2 and 20').isLength({ min: 2, max: 20 }),
+    checkErrors,
+    store);
 router.get('/', index);
 router.get('/:id', show);
 router.put('/:id', function (req, res, next) {
@@ -51,8 +52,8 @@ router.put('/:id', function (req, res, next) {
         return next()
     })
 },
-body('name', 'Name length should be between 2 and 20').isLength({ min: 2, max: 20 }),
-checkErrors, update);
+    body('name', 'Name length should be between 2 and 20').isLength({ min: 2, max: 20 }),
+    checkErrors, update);
 router.delete('/:id', destroy);
 // router.post(
 //     '/equipments',

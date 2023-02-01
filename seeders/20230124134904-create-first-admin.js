@@ -1,5 +1,7 @@
 'use strict';
 
+const { hashPassword } = require('../services/passwordService');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
@@ -16,7 +18,7 @@ module.exports = {
     {
       name: 'Meis',
       email: 'meiss@gmail.com',
-      password: '12345678',
+      password: hashPassword('Feras143'),
       phone: '+905555712345',
       roleId: '1',
       createdAt: Sequelize.fn("now"),
