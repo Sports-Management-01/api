@@ -87,7 +87,7 @@ const index = async (req, res, next) => {
   } else {
     res.status(422);
     result.success = false;
-    result.messages.push("No reservation This time is available");
+    result.messages.push("Please choose availabe date and time");
   }
   return res.send(result);
 };
