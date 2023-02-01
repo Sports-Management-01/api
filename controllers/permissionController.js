@@ -12,12 +12,12 @@ const store = async (req,res,next)=>{
       const [permission, created] = await models.Permission.findOrCreate({
         
         where: {
-            permission: req.body.permission,
+            
             roleId: req.body.roleId,
-        },
-        defaults: {
-       
-         
+            permission: req.body.permission,
+        }, 
+         defaults: { 
+           
          allowed: req.body.allowed
         } 
      });

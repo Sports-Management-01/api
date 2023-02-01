@@ -16,9 +16,9 @@ const upload = multer({
 /* GET users listing. */
 router.post(
   "/register",
-  (req, res, next) => {
-    upload(req, res, (err) => checkUpload(err, next));
-  },
+ /*  (req, res, next) => {
+    upload (req, res, (err) => checkUpload(err, next));
+  }, */
  // imageValdation,
   nameValidation,
   emailValidation,
