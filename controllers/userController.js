@@ -109,14 +109,22 @@ const update = async (req,res,next) =>{
     data:null,
     messages:[]
   };
+ const name = req.body.name
+   const   email = req.body.email
+    const  password = hashPassword(req.body.password)
+    const  phone = req.body.phone
   const user = await getInstanceById(req.params.id,"User");
   if(user.success){
-     await user.instance.update({
-      name: req.body.name,
-      email:req.body.email,
-      password: hashPassword(req.body.password),
-      phone: req.body.phone
-     });
+    const newData = {
+      name,
+      email,
+      password,
+      phone
+    };
+    if (req.file) {
+      newData.image = req.file.filename;
+    }
+     await user.instance.update( newData);
      result.data = userTransformer(user.instance);
      result.messages.push("User updated successfully...");
   }else{

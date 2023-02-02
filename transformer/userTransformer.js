@@ -5,7 +5,7 @@ const userTransformer = (user)=>{
     }
     if(user?.image){
         user.image = process.env.siteURL + '/uploads/'+ user.image
-    }
+    } 
     return user
 };
 

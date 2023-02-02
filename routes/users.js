@@ -9,9 +9,13 @@ const sendError = require('../services/errorService')
 
 const upload = multer({
   storage: storage,
-  fileFilter: uploadFilter("image"),
-  limits: { fileSize: 1_000_000 },
-});
+  fileFilter: uploadFilter('image'),
+  limits: {
+      fileSize: 1_000_000
+  }
+}).single('image')
+
+let uploadErrors = ''
 
 /* GET users listing. */
 router.post(
@@ -58,8 +62,17 @@ router.get(
 router.put(
   "/:id",
   isAuthenticated,
- // (req, res, next) => { upload(req, res, (err) => checkUpload(err, next));},
- // imageValdation,
+  function (req, res, next) {
+    upload(req, res, function (err) {
+        if (err instanceof multer.MulterError) {
+            uploadErrors = err.message
+        } else if (err) {
+            uploadErrors = 'file is required to be an image'
+        }
+        return next()
+    })
+},
+  imageValdation,
   nameValidation,
   emailValidation,
   passwordValidation,
