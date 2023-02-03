@@ -14,6 +14,13 @@ const store = async (req,res,next)=>{
         data: null,
         messages:[]
     };
+    const { password, passwordConfirmation } = req.body;
+    if (password != passwordConfirmation){
+      result.success = false
+    result.messages.push('dkfghkdf')
+    return res.send(result);
+    }
+    
     const [user, created] = await models.User.findOrCreate({
         where: { email: req.body.email },
         defaults: {
@@ -24,8 +31,10 @@ const store = async (req,res,next)=>{
           roleId: req?.body?.roleId,
           image: req?.file?.filename,
           
+          
         }
       });
+
       console.log(user)
       if(created){
         result.data = userTransformer(user)
