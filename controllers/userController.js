@@ -17,7 +17,7 @@ const store = async (req,res,next)=>{
     const { password, passwordConfirmation } = req.body;
     if (password != passwordConfirmation){
       result.success = false
-    result.messages.push('dkfghkdf')
+    result.messages.push('Password does not match!')
     return res.send(result);
     }
     
