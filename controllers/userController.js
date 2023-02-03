@@ -42,8 +42,8 @@ const store = async (req,res,next)=>{
         
       }else{
         res.status(409)
-        result.success = true;
-        result.messages.push("User created successfully");
+        result.success = false;
+        result.messages.push("User already exists!");
       }
       return res.send(result)
 };
