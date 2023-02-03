@@ -20,7 +20,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Role.init({
-    name: DataTypes.STRING
+    name: DataTypes.STRING,
+    required: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'Role',
