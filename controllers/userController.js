@@ -1,5 +1,5 @@
 const models = require('../models');
-
+const {Sequelize} = require("sequelize");
 
 // const { use } = require('../routes/users');
 
@@ -20,6 +20,9 @@ const store = async (req,res,next)=>{
     result.messages.push('Password does not match!')
     return res.send(result);
     }
+    //To check if account type is company or not
+ const userRole = await models.Role.findOne({where:{id:req?.body?.roleId}});
+ 
     
     const [user, created] = await models.User.findOrCreate({
         where: { email: req.body.email },
@@ -30,11 +33,12 @@ const store = async (req,res,next)=>{
           phone: req?.body?.phone,
           roleId: req?.body?.roleId,
           image: req?.file?.filename,
-          
+          approvedAt: userRole.required?null:Sequelize.fn('now')
           
         }
       });
 
+       
       console.log(user)
       if(created){
         result.data = userTransformer(user)
@@ -58,6 +62,11 @@ const login = async (req, res, next) => {
   const { email = "", password = "" } = req.body;
   const user = await models.User.findOne({ where: { email } });
   if (user) {
+    if(user.approvedAt == null){
+      result.success = false,
+      result.messages.push("Your account does not activate yet!!!!")
+      res.status(401);
+    }
     if (verifyPassword(password, user.password)) {
       result.data = userTransformer(user);
       result.messages.push("Loggen in successfully");
