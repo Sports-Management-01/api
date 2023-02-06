@@ -9,11 +9,9 @@ const fieldTransformer = (field) => {
     }
     return field;
 };
-
 const fieldsTransformer = (fields) => {
     return fields.map((field) => fieldTransformer(field))
 }
-
 module.exports = {
     fieldTransformer,
     fieldsTransformer
