@@ -194,15 +194,16 @@ const checkAvailability = async (req, res, next) => {
   const item = await getInstanceById(req.params.id, "Field");
   if (item.success) {
     result.success = true;
-    const reservations = await models.Reservation.findAll(
-      (where = {
+    const reservations = await models.Reservation.findAll({
+      where : {
         from: {
           [Op.lte]: req.body.date + " 00:00:00",
         },
         to: {
           [Op.gte]: req.body.date + " 23:59:59",
         },
-      })
+      }}
+      
     );
     const start = +item.instance.from.split(':')[0]; // 07:00
     const end = +item.instance.to.split(':'); // 17:00
@@ -215,8 +216,9 @@ const checkAvailability = async (req, res, next) => {
         time: hour,
         available: !isReserved
       })
+      console.log(times)
     }
-    result.data = times
+     result.data = times
   } else {
     res.status(item.status);
     result.success = false;
