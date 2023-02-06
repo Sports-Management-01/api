@@ -12,7 +12,6 @@ const { Op, QueryTypes } = require("sequelize");
 const { Sequelize } = require("sequelize");
 const { sequelize } = require("../models");
 
-
 const store = async (req, res, next) => {
   const result = {
     success: true,
@@ -26,7 +25,7 @@ const store = async (req, res, next) => {
       imagesArr.push(req.files[i].filename);
     }
 
-    console.log(imagesArr)
+    console.log(imagesArr);
   }
   const [field, created] = await models.Field.findOrCreate({
     where: {
@@ -63,7 +62,7 @@ const index = async (req, res, next) => {
     data: null,
     messages: [],
   };
- 
+
   let fieldQuery = "SELECT * FROM fields where 1=1 ";
 
   if (req.query?.category) {
@@ -88,7 +87,7 @@ const index = async (req, res, next) => {
 
   const [fields, metadata] = await sequelize.query(fieldQuery);
   if (fields.length > 0) {
-    result.data = fieldsTransformer(fields) ;
+    result.data = fieldsTransformer(fields);
     result.messages.push("You have all fields");
   } else {
     res.status(422);
@@ -105,8 +104,9 @@ const show = async (req, res, next) => {
   };
   const item = await getInstanceById(req.params.id, "Field");
   if (item.success) {
-    (result.success = true),
-     (result.data = fieldTransformer(item.instance.dataValues));
+    result.success = true;
+    result.data = fieldTransformer(item.instance.dataValues);
+    result.data.Category = await item.instance.getCategory();
   }
   result.messages = [...item.messages];
   res.status(item.status);
@@ -118,53 +118,48 @@ const update = async (req, res, next) => {
     data: null,
     messages: [],
   };
-  console.log("item")
+  console.log("item");
   const item = await getInstanceById(req.params.id, "Field");
   if (item.success) {
-    
     if (item.instance.name != req.body.name) {
-
-      
       const newNameAlreadyUsed = await models.Field.findOne({
         where: { name: req.body.name },
       });
-      if (newNameAlreadyUsed)
-       {
+      if (newNameAlreadyUsed) {
         return res.send("new name is already token");
       }
     }
 
-   const  newData = {
-    name: req.body.name,
-    categoryId: req.body.categoryId,
-    length: req.body.length,
-    width: req.body.width,
-    hourPrice: req.body.hourPrice,
-    from: req.body.from,
-    to: req.body.to,
-    stateId: req.body.stateId,
-    adress: req.body.adress,
-    latitude: req.body.latitude,
-    longitude: req.body.longitude,
-   
-    isActive: req.body.isActive,
-   }
-   let imagesArr = [];
+    const newData = {
+      name: req.body.name,
+      categoryId: req.body.categoryId,
+      length: req.body.length,
+      width: req.body.width,
+      hourPrice: req.body.hourPrice,
+      from: req.body.from,
+      to: req.body.to,
+      stateId: req.body.stateId,
+      adress: req.body.adress,
+      latitude: req.body.latitude,
+      longitude: req.body.longitude,
+
+      isActive: req.body.isActive,
+    };
+    let imagesArr = [];
     if (req.files) {
-      
-   const image = item.instance.image;
+      const image = item.instance.image;
       for (let i = 0; i < req.files.length; i++) {
         imagesArr.push(req.files[i].filename);
       }
-      console.log(imagesArr)
-      newData.image = JSON.stringify([...imagesArr, ...JSON.parse(image)])
+      console.log(imagesArr);
+      newData.image = JSON.stringify([...imagesArr, ...JSON.parse(image)]);
     }
 
-  console.log(`newData.image: ${newData.image }`)
+    console.log(`newData.image: ${newData.image}`);
     await item.instance.update(newData);
-    result.data = fieldTransformer( item.instance);
+    result.data = fieldTransformer(item.instance);
     result.messages.push("Field updated successfully");
-    console.log(item)
+    console.log(item);
   } else {
     result.messages = [...item.messages];
     res.status(item.status);
@@ -188,11 +183,61 @@ const destroy = async (req, res, next) => {
   }
   return res.send(result);
 };
+const checkAvailability = async (req, res, next) => {
+  const result = {
+    success: true,
+    data: null,
+    messages: [],
+  };
+  const times = [];
+  // [{time: 09:00, available: true}, {time: 10:00, available: false}]
+  const item = await getInstanceById(req.params.id, "Field");
+  if (item.success) {
+    result.success = true;
+    const reservations = await models.Reservation.findAll(
+      (where = {
+        from: {
+          [Op.lte]: req.body.date + " 00:00:00",
+        },
+        to: {
+          [Op.gte]: req.body.date + " 23:59:59",
+        },
+      })
+    );
+    const start = +item.instance.from.split(':')[0]; // 07:00
+    const end = +item.instance.to.split(':'); // 17:00
+    for (var i = start; i < end; i++) {
+      let timeSlot = i > 9 ? i : '0' + i
+      const hour = timeSlot + ':00'
+      timeSlot = req.body.date + ' ' + hour + ':00'
+      const isReserved = timeisReserved(reservations, timeSlot)
+      times.push({
+        time: hour,
+        available: !isReserved
+      })
+    }
+    result.data = times
+  } else {
+    res.status(item.status);
+    result.success = false;
+    result.messages = [...item.messages];
+  }
+  return res.send(result);
+};
 
+const timeisReserved = (reservations, timeSlot) => {
+  reservations.forEach((reservation) => {
+    if (reservation.from === timeSlot) {
+      return true
+    }
+  })
+  return false
+}
 module.exports = {
   store,
   index,
   show,
   update,
   destroy,
+  checkAvailability,
 };
