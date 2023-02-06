@@ -4,7 +4,7 @@ const isAuthenticated = async(req,res,next)=>{
     const auth = req?.headers?.authorization
     if(!auth){
         res.status(401)
-        return ({
+        return res.send({
             success:false,
             messages:['Please provide a valid auth header']
         })

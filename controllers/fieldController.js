@@ -118,14 +118,18 @@ const update = async (req, res, next) => {
     data: null,
     messages: [],
   };
- 
+  console.log("item")
   const item = await getInstanceById(req.params.id, "Field");
   if (item.success) {
+    
     if (item.instance.name != req.body.name) {
+
+      
       const newNameAlreadyUsed = await models.Field.findOne({
         where: { name: req.body.name },
       });
-      if (newNameAlreadyUsed) {
+      if (newNameAlreadyUsed)
+       {
         return res.send("new name is already token");
       }
     }
@@ -160,6 +164,7 @@ const update = async (req, res, next) => {
     await item.instance.update(newData);
     result.data = fieldTransformer( item.instance);
     result.messages.push("Field updated successfully");
+    console.log(item)
   } else {
     result.messages = [...item.messages];
     res.status(item.status);
