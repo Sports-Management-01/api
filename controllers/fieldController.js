@@ -4,9 +4,14 @@ const {
   timeValidation,
   dateValidation,
 } = require("../services/validationService");
+const {
+  fieldTransformer,
+  fieldsTransformer,
+} = require("../transformer/fieldTransformer");
 const { Op, QueryTypes } = require("sequelize");
 const { Sequelize } = require("sequelize");
 const { sequelize } = require("../models");
+
 
 const store = async (req, res, next) => {
   const result = {
@@ -44,6 +49,7 @@ const store = async (req, res, next) => {
     },
   });
   if (created) {
+    result.data = fieldTransformer(field);
     (result.data = field), result.messages.push("Field created successfully");
   } else {
     res.status(409);
@@ -82,7 +88,7 @@ const index = async (req, res, next) => {
 
   const [fields, metadata] = await sequelize.query(fieldQuery);
   if (fields.length > 0) {
-    result.data = fields;
+    result.data = fieldsTransformer(fields) ;
     result.messages.push("You have all fields");
   } else {
     res.status(422);
@@ -99,7 +105,8 @@ const show = async (req, res, next) => {
   };
   const item = await getInstanceById(req.params.id, "Field");
   if (item.success) {
-    (result.success = true), (result.data = item.instance.dataValues);
+    (result.success = true),
+     (result.data = fieldTransformer(item.instance.dataValues));
   }
   result.messages = [...item.messages];
   res.status(item.status);
@@ -151,7 +158,7 @@ const update = async (req, res, next) => {
 
   console.log(`newData.image: ${newData.image }`)
     await item.instance.update(newData);
-    result.data = item.instance;
+    result.data = fieldTransformer( item.instance);
     result.messages.push("Field updated successfully");
   } else {
     result.messages = [...item.messages];

@@ -1,6 +1,10 @@
 const fieldTransformer = (field) => {
     if (field?.image) {
-        field.image = process.env.siteURL + '/uploads/' + field.image
+        const images = JSON.parse(field.image)
+        const urls = images.map((img) => {
+            return process.env.siteURL + '/uploads/' + img
+        })
+        field.image = urls
     }
     return field;
 };

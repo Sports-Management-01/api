@@ -50,7 +50,7 @@ const index = async (req, res, next) => {
     result.messages.push();
   }
   console.log(result.data);
-  return res.send(result.data);
+  return res.send(result);
 };
 
 const show = async (req, res, next) => {
