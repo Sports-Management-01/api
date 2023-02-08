@@ -192,39 +192,38 @@ const checkAvailability = async (req, res, next) => {
   };
   const times = [];
   // [{time: 09:00, available: true}, {time: 10:00, available: false}]
-  console.log(req.body.date)
+  console.log(req.body.date);
   const item = await getInstanceById(req.params.id, "Field");
   if (item.success) {
     result.success = true;
     const reservations = await models.Reservation.findAll({
-      where : {
-        fieldId :req.params.id,
+      where: {
+        fieldId: req.params.id,
         from: {
           [Op.gte]: req.body.date + " 00:00:00",
         },
         to: {
           [Op.lte]: req.body.date + " 23:59:59",
         },
-      }}
-      
-    );
-   
-    const start = +item.instance.from.split(':')[0]; // 07:00
-    const end = +item.instance.to.split(':')[0]; // 17:00
-    console.log(start)
-    console.log(end)
+      },
+    });
+
+    const start = +item.instance.from.split(":")[0]; // 07:00
+    const end = +item.instance.to.split(":")[0]; // 17:00
+    /* console.log(start);
+    console.log(end); */
     for (var i = start; i < end; i++) {
-      let timeSlot = i > 9 ? i : '0' + i
-      const hour = timeSlot + ':00'
-      timeSlot = req.body.date + ' ' + hour + ':00'
-      const isReserved = timeisReserved(reservations, timeSlot)
+      let timeSlot = i > 9 ? i : "0" + i;
+      const hour = timeSlot + ":00";
+      timeSlot = req.body.date + " " + hour + ":00";
+      const isReserved = timeisReserved(reservations, timeSlot);
       times.push({
         time: hour,
-        available: !isReserved
-      })
-      console.log(times)
+        available: !isReserved,
+      });
+      console.log(times);
     }
-     result.data = times
+    result.data = times;
   } else {
     res.status(item.status);
     result.success = false;
@@ -234,15 +233,15 @@ const checkAvailability = async (req, res, next) => {
 };
 
 const timeisReserved = (reservations, timeSlot) => {
-  console.log(reservations)
+  console.log(reservations);
   for (const reservation of reservations) {
-    console.log()
+    console.log();
     if (dayjs(reservation.from).format("YYYY-MM-DD HH:mm:ss") === timeSlot) {
-      return true
+      return true;
     }
   }
-  return false
-}
+  return false;
+};
 module.exports = {
   store,
   index,
