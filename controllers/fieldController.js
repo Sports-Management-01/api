@@ -189,7 +189,8 @@ const checkAvailability = async (req, res, next) => {
     data: null,
     messages: [],
   };
-  const times = [];
+  console.log(result)
+  var times = [];
   // [{time: 09:00, available: true}, {time: 10:00, available: false}]
   const item = await getInstanceById(req.params.id, "Field");
   if (item.success) {
@@ -205,20 +206,34 @@ const checkAvailability = async (req, res, next) => {
       }}
       
     );
+    const timeisReserved = (reservations, timeSlot) => {
+      reservations.forEach((reservation) => {
+        if (reservation.from === timeSlot) {
+          return true
+        }
+      })
+      return false
+    }
     const start = +item.instance.from.split(':')[0]; // 07:00
-    const end = +item.instance.to.split(':'); // 17:00
+    const end = +item.instance.to.split(':')[0]; // 17:00
+    console.log(start)
+    console.log(end)
     for (var i = start; i < end; i++) {
       let timeSlot = i > 9 ? i : '0' + i
       const hour = timeSlot + ':00'
       timeSlot = req.body.date + ' ' + hour + ':00'
       const isReserved = timeisReserved(reservations, timeSlot)
+
       times.push({
         time: hour,
         available: !isReserved
       })
-      console.log(times)
+      console.log("new:",isReserved)
     }
-     result.data = times
+    
+    console.log("Feras",times)
+      result.data = times
+      console.log(result.data)
   } else {
     res.status(item.status);
     result.success = false;
@@ -227,14 +242,7 @@ const checkAvailability = async (req, res, next) => {
   return res.send(result);
 };
 
-const timeisReserved = (reservations, timeSlot) => {
-  reservations.forEach((reservation) => {
-    if (reservation.from === timeSlot) {
-      return true
-    }
-  })
-  return false
-}
+
 module.exports = {
   store,
   index,
