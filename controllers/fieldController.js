@@ -187,10 +187,14 @@ const destroy = async (req, res, next) => {
 const checkAvailability = async (req, res, next) => {
   const result = {
     success: true,
-    data: null,
+    data: {
+      equipment: [],
+      times: []
+    },
     messages: [],
   };
-  console.log(result)
+  // console.log(result)
+  
   var times = [];
   // [{time: 09:00, available: true}, {time: 10:00, available: false}]
   console.log(req.body.date);
@@ -209,11 +213,16 @@ const checkAvailability = async (req, res, next) => {
       }}
       
     );
+    const category= await getInstanceById(item.instance.categoryId, "Category")
+    if(category.success){
+      result.data.equipment = await category.instance.getEquipments()
+      // console.log(category.instance.getEquipments())
+    }
    
     const start = +item.instance.from.split(':')[0]; // 07:00
     const end = +item.instance.to.split(':')[0]; // 17:00
-    console.log(start)
-    console.log(end)
+    // console.log(start)
+    // console.log(end)
     for (var i = start; i < end; i++) {
       let timeSlot = i > 9 ? i : '0' + i
       const hour = timeSlot + ':00'
@@ -223,9 +232,9 @@ const checkAvailability = async (req, res, next) => {
         time: hour,
         available: !isReserved
       })
-      console.log(times)
+      // console.log(times)
     }
-     result.data = times
+     result.data.times = times
   } else {
     res.status(item.status);
     result.success = false;
@@ -235,15 +244,16 @@ const checkAvailability = async (req, res, next) => {
 };
 
 const timeisReserved = (reservations, timeSlot) => {
-  console.log(reservations)
+  // console.log(reservations)
   for (const reservation of reservations) {
-    console.log()
+    
     if (dayjs(reservation.from).format("YYYY-MM-DD HH:mm:ss") === timeSlot) {
       return true
     }
   }
   return false
 }
+
 module.exports = {
   store,
   index,
