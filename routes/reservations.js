@@ -1,7 +1,7 @@
 var express= require('express');
 const { store, index, update, show, destroy } = require('../controllers/reservationController');
 const { isAuthenticated } = require('../middlewares/isAuthenticated');
-const { getNowdate, dateAfter, dateValidation, errorResponse } = require('../services/validationService');
+const { getNowdate, dateAfter, dateValidation, errorResponse, DateValidation } = require('../services/validationService');
 var router= express.Router()
 const { check, body } = require("express-validator");
 const { getInstanceById } = require('../services/modelService');
@@ -10,24 +10,24 @@ const isReservationOwner = require('../services/isReservationOwner');
 
 router.post('/', isAuthenticated, 
  check('from', 'Start date should match the YYYY-MM-DD syntaxt').custom((value) => {
-    return dateValidation(value)
+    return DateValidation(value)
 }),
 check('to', 'End date should match the YYYY-MM-DD syntaxt').custom((value) => {
-    return dateValidation(value)
+    return DateValidation(value)
 }), 
 // check('dateTime').isISO8601().toDate().withMessage("Invalid day received"),
 // check('from', 'The from date should be after now').custom((value)=>{
 //     return getNowdate(value)
 // }),
-check('dateNow', 'The start date should not be small than date now')
-.custom((value, { req }) => {
-    return dateAfter(getNowdate(new Date()), req.body.from)
-}),
+// check('dateNow', 'The start date should not be small than date now')
+// .custom((value, { req }) => {
+//     return dateAfter(getNowdate(new Date()), req.body.from)
+// }),
 
-check('datesOrder', 'The end date should be after the start date')
-.custom((value, { req }) => {
-    return dateAfter(req.body.from, req.body.to)
-}),
+// check('datesOrder', 'The end date should be after the start date')
+// .custom((value, { req }) => {
+//     return dateAfter(req.body.from, req.body.to)
+// }),
 errorResponse ,store);
 router.get('/', index);
 router.get('/:id', show);

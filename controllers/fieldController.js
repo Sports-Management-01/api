@@ -223,13 +223,16 @@ const checkAvailability = async (req, res, next) => {
     const end = +item.instance.to.split(':')[0]; // 17:00
     // console.log(start)
     // console.log(end)
-    for (var i = start; i < end; i++) {
+    for (var i = start; i < (end - 1); i++) {
       let timeSlot = i > 9 ? i : '0' + i
       const hour = timeSlot + ':00'
+      let to = ((i + 1) > 9) ? (i + 1) : '0' + (i + 1)
+      to += ':00'
       timeSlot = req.body.date + ' ' + hour + ':00'
       const isReserved = timeisReserved(reservations, timeSlot)
       times.push({
         time: hour,
+        to,
         available: !isReserved
       })
       // console.log(times)

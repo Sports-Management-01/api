@@ -12,11 +12,9 @@ const store = async (req,res,next)=>{
       where: {
         userId: req.user.id,
         fieldId,
-        from,
-        to, 
       },
       defaults: {
-        total : await reservationTotalCost(fieldId, from,to, equipments) 
+        total : 50 //await reservationTotalCost(fieldId, from,to, equipments) 
       }
     })
     if(created){
