@@ -11,6 +11,7 @@ const {
 const { Op, QueryTypes } = require("sequelize");
 const { Sequelize } = require("sequelize");
 const { sequelize } = require("../models");
+const dayjs = require("dayjs");
 
 const store = async (req, res, next) => {
   const result = {
@@ -192,32 +193,28 @@ const checkAvailability = async (req, res, next) => {
   console.log(result)
   var times = [];
   // [{time: 09:00, available: true}, {time: 10:00, available: false}]
+  console.log(req.body.date)
   const item = await getInstanceById(req.params.id, "Field");
   if (item.success) {
     result.success = true;
     const reservations = await models.Reservation.findAll({
       where : {
+        fieldId :req.params.id,
         from: {
-          [Op.lte]: req.body.date + " 00:00:00",
+          [Op.gte]: req.body.date + " 00:00:00",
         },
         to: {
-          [Op.gte]: req.body.date + " 23:59:59",
+          [Op.lte]: req.body.date + " 23:59:59",
         },
       }}
       
     );
-    const timeisReserved = (reservations, timeSlot) => {
-      reservations.forEach((reservation) => {
-        if (reservation.from === timeSlot) {
-          return true
-        }
-      })
-      return false
-    }
+   
     const start = +item.instance.from.split(':')[0]; // 07:00
     const end = +item.instance.to.split(':')[0]; // 17:00
     console.log(start)
     console.log(end)
+    
     for (var i = start; i < end; i++) {
       let timeSlot = i > 9 ? i : '0' + i
       const hour = timeSlot + ':00'
@@ -242,7 +239,14 @@ const checkAvailability = async (req, res, next) => {
   return res.send(result);
 };
 
-
+const timeisReserved = (reservations, timeSlot) => {
+  reservations.forEach((reservation) => {
+    if (reservation.from === timeSlot) {
+      return true
+    }
+  })
+  return false
+}
 module.exports = {
   store,
   index,
