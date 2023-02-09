@@ -8,6 +8,7 @@ const store = async (req,res,next)=>{
   const {fieldId, from, to, equipments } = req.body
   const field = await getInstanceById(fieldId, "Field")
   if(field.success)
+  
   {const [reservation, created]= await models.Reservation.findOrCreate({
       where: {
         userId: req.user.id,
