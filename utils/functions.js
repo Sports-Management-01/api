@@ -15,6 +15,15 @@ const reservationTotalCost = async (fieldId, from, to, equipments = [])=>{
     return eqCost + fieldCost
 }
 
+const getTimePlusHour = (time) => {
+    let hour = (+time.split(':')[0]) + 1
+    if (hour < 10) {
+        hour = '0' + hour
+    }
+    return hour + ':00'
+}
+
 module.exports = {
-    reservationTotalCost
+    reservationTotalCost,
+    getTimePlusHour
 }
