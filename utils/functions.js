@@ -16,7 +16,7 @@ const reservationTotalCost = async (fieldId, from, to, equipments = [])=>{
 }
 
 const getTimePlusHour = (time) => {
-    const hour = (+time.split(':')[0]) + 1
+    let hour = (+time.split(':')[0]) + 1
     if (hour < 10) {
         hour = '0' + hour
     }
