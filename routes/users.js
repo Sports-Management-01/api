@@ -72,7 +72,7 @@ router.put(
         return next()
     })
 },
-  imageValdation,
+ // imageValdation,
   nameValidation,
   emailValidation,
   passwordValidation,

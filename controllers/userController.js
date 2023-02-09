@@ -113,9 +113,12 @@ const user = await getInstanceById(req.params.id,"User");
 if(user.success){
   result.data = userTransformer(user.instance.dataValues);
 }
-result.success = false;
-result.messages = [...user.messages];
-res.status(user.status);
+else{
+  result.success = false;
+  result.messages = [...user.messages];
+  res.status(user.status);
+}
+
 return res.send(result);
 }
 //END Get my profile
