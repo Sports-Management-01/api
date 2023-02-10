@@ -256,7 +256,33 @@ const timeisReserved = (reservations, timeSlot) => {
   }
   return false
 }
+//To get fields that belong to company itself
+const companyFields = async (req,res,next)=>{
+  const result = {
+    success: true,
+    data: null,
+    messages: [],
+  };
+  const fields = await models.Field.findAll({
+  where: {
+    companyId : req.user.id,
 
+  },  
+  include:[
+    {
+      model: models.State,
+    
+    },
+    {
+      model: models.Category
+    
+    }
+     
+  ]
+})
+result.data = fields;
+return res.send(result)
+}
 module.exports = {
   store,
   index,
@@ -264,4 +290,5 @@ module.exports = {
   update,
   destroy,
   checkAvailability,
+  companyFields
 };

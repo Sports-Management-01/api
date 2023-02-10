@@ -23,6 +23,9 @@ module.exports = (sequelize, DataTypes) => {
       Field.hasMany(models.FieldImage, {
         foreignKey: "fieldId"
       })
+      Field.belongsTo(models.State, {
+        foreignKey: 'stateId'
+      })
     }
   }
   Field.init({

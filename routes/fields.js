@@ -1,6 +1,6 @@
 var express= require('express');
 const models = require('../models');
-const { store, index, show, update, destroy, checkAvailability } = require('../controllers/fieldController');
+const { store, index, show, update, destroy, checkAvailability, companyFields } = require('../controllers/fieldController');
 const { isAuthenticated } = require('../middlewares/isAuthenticated');
 const multer = require('multer');
 const { body, check } = require('express-validator');
@@ -81,6 +81,9 @@ check('image').custom((value, { req }) => {
 update);
 router.delete('/:id', destroy);
 router.post('/:id/availability',checkAvailability )
+router.get('/company/fields', 
+isAuthenticated,
+companyFields)
 // Search Route
 
 

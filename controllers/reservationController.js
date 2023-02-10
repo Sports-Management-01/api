@@ -157,36 +157,7 @@ const destroy = async (req, res, next) => {
   }
   return res.send(result);
 };
-// const reservationEquipment = async(req,res)=>{
-//     const equipment = await getInstanceById(req.body.equipmentId, "Equipment");
-//     const reservation = await getInstanceById(req.body.reservationId, "Reservation");
-//     const {count} = req.body
-//     try{
-//       if (equipment.success) {
-//         const equAdded = await reservation.instance.addEquipment(req.body.equipmentId);
 
-//         if (equAdded) {
-//           return res.send({
-//             success: true,
-//             messages: ["Equipment has been added to the reservation list"],
-//           });
-//         } else {
-//           return res.send({
-//             success: false,
-//             messages: ["Could not add the equipment"],
-//           });
-//         }
-//       }
-//       return res.send({
-//         success: false,
-//         messages: "Errors invalid equipment Id",
-//       });
-
-//     }catch(error){
-//       console.log(error)
-//       return new Error(error)
-//     }
-//   };
 const getUserReservation = async (req,res,next)=>{
   const result = {
     success: true,
