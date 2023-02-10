@@ -187,6 +187,41 @@ const destroy = async (req, res, next) => {
 //       return new Error(error)
 //     }
 //   };
+const getUserReservation = async (req,res,next)=>{
+  const result = {
+    success: true,
+    data: null,
+    messages: [],
+  };
+  const reservations = await models.Reservation.findAll({
+    
+   paranoid: false,
+    where: {
+      userId : req.user.id,
+
+    },
+    
+    include:[
+      {
+       model: models.ReservationEquipment,
+       include: [
+        models.Equipment
+       ]
+      },
+      {
+        model: models.Field,
+       include: [
+        models.Category
+       ]
+      }
+    ]
+    
+  });
+  result.data = reservations;
+  
+
+ return res.send(result)
+}
 
 module.exports = {
   store,
@@ -194,5 +229,6 @@ module.exports = {
   update,
   show,
   destroy,
+  getUserReservation
   // reservationEquipment
 };
