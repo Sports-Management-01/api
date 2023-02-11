@@ -1,6 +1,6 @@
 const models = require("../models");
 const { getInstanceById } = require("../services/modelService");
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 const { sequelize } = require("../models");
 const { reservationTotalCost, getTimePlusHour } = require("../utils/functions");
 const store = async (req, res, next) => {
@@ -158,48 +158,72 @@ const destroy = async (req, res, next) => {
   return res.send(result);
 };
 
-const getUserReservation = async (req,res,next)=>{
+const getUserReservation = async (req, res, next) => {
   const result = {
     success: true,
     data: null,
     messages: [],
   };
   const reservations = await models.Reservation.findAll({
-    
-   paranoid: false,
+    paranoid: false,
     where: {
-      userId : req.user.id,
-
+      userId: req.user.id,
     },
-    
-    include:[
+
+    include: [
       {
-       model: models.ReservationEquipment,
-       include: [
-        models.Equipment
-       ]
+        model: models.ReservationEquipment,
+        include: [models.Equipment],
       },
       {
         model: models.Field,
-       include: [
-        models.Category
-       ]
-      }
-    ]
-    
+        include: [models.Category],
+      },
+    ],
   });
   result.data = reservations;
-  
 
- return res.send(result)
-}
+  return res.send(result);
+};
+const companyReservations = async (req, res, next) => {
+  const result = {
+    success: true,
+    data: null,
+    messages: [],
+  };
+  const fields = await models.Field.findAll({where: { companyId: req.user.id } , 
+    include:[
+      {model:models.Category},
+    {model:models.Reservation,
+      where: {
+      deletedAt : null
+    },
+    include : [
+      {model:models.User},
+      
 
+        {
+          model: models.ReservationEquipment,
+          include: [models.Equipment],
+        },
+        // {
+        //   model: models.Field,
+        //   include: [models.Category],
+        // },
+      ],
+  }
+  ]});
+
+  return res.send(fields);
+ 
+};
 module.exports = {
   store,
   index,
   update,
   show,
   destroy,
-  getUserReservation
+  getUserReservation,
+  companyReservations,
   // reservationEquipment
 };

@@ -276,7 +276,7 @@ const companyFields = async (req,res,next)=>{
     {
       model: models.Category
     
-    }
+    },
      
   ]
 })

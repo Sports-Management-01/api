@@ -1,5 +1,5 @@
 var express= require('express');
-const { store, index, update, show, destroy, getUserReservation } = require('../controllers/reservationController');
+const { store, index, update, show, destroy, getUserReservation, companyReservations } = require('../controllers/reservationController');
 const { isAuthenticated } = require('../middlewares/isAuthenticated');
 const { getNowdate, dateAfter, dateValidation, errorResponse, DateValidation } = require('../services/validationService');
 var router= express.Router()
@@ -7,7 +7,8 @@ const { check, body } = require("express-validator");
 const { getInstanceById } = require('../services/modelService');
 const isReservationOwner = require('../services/isReservationOwner');
  
-router.get('/userreservation', isAuthenticated, getUserReservation)
+router.get('/userreservation', isAuthenticated, getUserReservation);
+router.get('/companyreservation', isAuthenticated, companyReservations);
 
 router.post('/', isAuthenticated, 
  check('from', 'Start date should match the YYYY-MM-DD syntaxt').custom((value) => {
