@@ -211,10 +211,11 @@ const companyReservations = async (req, res, next) => {
         //   include: [models.Category],
         // },
       ],
-  }
-  ]});
-
-  return res.send(fields);
+  },
+  ],
+});
+  result.data = fields;
+  return res.send(result);
  
 };
 module.exports = {
