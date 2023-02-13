@@ -24,6 +24,10 @@ module.exports = {
       total: {
         type: Sequelize.INTEGER.UNSIGNED
       },
+      cancelationReason: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
