@@ -206,6 +206,7 @@ const companyReservations = async (req, res, next) => {
           model: models.ReservationEquipment,
           include: [models.Equipment],
         },
+
         // {
         //   model: models.Field,
         //   include: [models.Category],
@@ -213,8 +214,10 @@ const companyReservations = async (req, res, next) => {
       ],
   },
   ],
-});
+}
+);
   result.data = fields;
+  
   return res.send(result);
  
 };
