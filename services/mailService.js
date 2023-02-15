@@ -26,15 +26,15 @@ const mailTemplates = {
 
 function sendEmail(user, mailType, variables = {}) {
   let message = mailTemplates[mailType].message
-  message.replace(':name', user.name)
-  Object.keys(variables).forEach((variable) => {
-    message.replace(':' + variable, variables[variable])
-  })
+  message = message.replace(':name', user.name)
+  for (const variable of Object.keys(variables)) {
+    message = message.replace(':' + variable, variables[variable])
+  }
   var mailOptions = {
     from: 'toptepespor@gmail.com',
     to: user.email,
     subject: mailTemplates[mailType].subject,
-    text: message
+    html: message
   };
   
   transporter.sendMail(mailOptions, function(error, info){

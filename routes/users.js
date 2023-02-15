@@ -6,6 +6,7 @@ const multer = require("multer");
 const { storage, uploadFilter  } = require("../services/uploadService");
 const { phoneValdation,nameValidation, emailValidation,  passwordValidation, imageValdation, checkUpload, errorResponse} = require("../services/validationService");
 const sendError = require('../services/errorService')
+const {sendEmail} = require('../services/mailService')
 
 const upload = multer({
   storage: storage,
@@ -18,6 +19,11 @@ const upload = multer({
 let uploadErrors = ''
 
 /* GET users listing. */
+router.get('/mail', isAuthenticated ,async(req,res,next)=>(sendEmail(req.user, "reservationCancellation", {
+  date: "2023-01-01",
+  field: "Stad Alarab"
+})))
+
 router.post(
   "/register",
  /*  (req, res, next) => {
@@ -108,5 +114,6 @@ router.get("/usersrole",
   getUsersRole
 
   );
+
 //END
 module.exports = router;
