@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { store,login, index,show,update,destroy } = require('../controllers/userController');
+const { store,login, index,show,update,destroy,getUsersRole } = require('../controllers/userController');
 const {isAuthenticated} = require("../middlewares/isAuthenticated");
 const multer = require("multer");
 const { storage, uploadFilter  } = require("../services/uploadService");
@@ -95,4 +95,18 @@ router.delete(
   destroy
 );
 //END Delete user
+//GetusersWithRole
+router.get("/usersrole", 
+  isAuthenticated,
+  async(req, res, next) => {
+    if(await req.user.can('role:index')) {
+      console.log(req.user.can('role:index'))
+      return next()
+    }
+    return sendError(res,"You don't have permission to continue",403)
+  },
+  getUsersRole
+
+  );
+//END
 module.exports = router;

@@ -173,11 +173,22 @@ const destroy = async (req, res, next) => {
     data: null,
     messages: [],
   };
-  const item = await getInstanceById(req.params.id, "Field");
+ const item = await getInstanceById(req.params.id, "Field");
+ const reservations = await item.instance.getReservations({
+  where:{
+    from: {
+      [Op.gte]: new Date()
+    },
+  }
+ });
+ console.log(reservations)
   if (item.success) {
-    await item.instance.destroy();
+    if(reservations?.length > 0 ){result.messages.push("This Field has reservations you can't delete it!");}
+   else{
+     await item.instance.destroy();
     result.messages.push("Field deleted successfully");
-  } else {
+      } 
+} else {
     res.status(item.status);
     result.success = false;
     result.messages = [...item.messages];

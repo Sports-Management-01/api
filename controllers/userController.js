@@ -95,7 +95,17 @@ const index = async(req,res,next)=>{
     data:null,
     messages:[],
   };
-  const users = await models.User.findAll();
+  const users = await models.User.findAll({ 
+    include: [
+      {
+        model: models.Role,
+      
+      }
+     
+    ],
+
+  });
+ 
   result.data =   userTransformers(users);
   console.log(result.data);
   return res.send(result);
@@ -112,6 +122,7 @@ const result = {
 const user = await getInstanceById(req.params.id,"User");
 if(user.success){
   result.data = userTransformer(user.instance.dataValues);
+  result.data.Role = await user.instance.getRole();//updated
 }
 else{
   result.success = false;
@@ -175,11 +186,34 @@ const destroy = async (req, res, next) => {
   return res.send(result);
 };
 //END delete user
+
+//GetUsersWithRole
+const getUsersRole = async (req, res, next) => {
+  const result = {
+    success: true,
+    data: null,
+    messages: [],
+  };
+  const users = await models.Users.findAll({
+  //  paranoid: false,
+    include: [
+      {
+        model: models.Role,
+      
+      }
+     
+    ],
+  });
+  result.data = users;
+
+  return res.send(result);
+};
 module.exports = {
     store,
     login,
     index,
     show,
     update,
-    destroy
+    destroy,
+    getUsersRole
 }
