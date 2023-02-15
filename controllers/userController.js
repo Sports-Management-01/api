@@ -51,7 +51,31 @@ const store = async (req,res,next)=>{
       }
       return res.send(result)
 };
+//Approving Company
+const companyApproved = async (req,res,next)=>{
+  const result = {
+    success: true,
+    data: null,
+    messages:[]
+};
+const approvedAt =  Sequelize.fn('now');
+const newData = {approvedAt}
+const user = await getInstanceById(req.params.id,"User");
+if(user.success){
+  if(user.approvedAt == null){
+    
+ 
+  await user.instance.update( newData);
+  result.data = userTransformer(user.instance);
+  result.messages.push("Company has been Activated...");}
+}else{
+ result.messages = [...user.messages];
+ res.status(user.status);
+}
+return res.send(result)
+}
 
+//END
 //LOGIN
 const login = async (req, res, next) => {
   const result = {
@@ -208,6 +232,7 @@ const getUsersRole = async (req, res, next) => {
 
   return res.send(result);
 };
+
 module.exports = {
     store,
     login,
@@ -215,5 +240,6 @@ module.exports = {
     show,
     update,
     destroy,
-    getUsersRole
+    getUsersRole,
+    companyApproved
 }

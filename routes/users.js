@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { store,login, index,show,update,destroy,getUsersRole } = require('../controllers/userController');
+const { store,login, index,show,update,destroy,getUsersRole, companyApproved } = require('../controllers/userController');
 const {isAuthenticated} = require("../middlewares/isAuthenticated");
 const multer = require("multer");
 const { storage, uploadFilter  } = require("../services/uploadService");
@@ -23,7 +23,16 @@ router.get('/mail', isAuthenticated ,async(req,res,next)=>(sendEmail(req.user, "
   date: "2023-01-01",
   field: "Stad Alarab"
 })))
-
+/**Fill  ApprovedAt To That company */
+router.put('/approve/:id', isAuthenticated , async(req, res, next) => {
+  if(await req.user.can('company:approve')) {
+    console.log(req.user.can('company:approve'))
+    return next()
+  }
+  return sendError(res,"You don't have permission to continue",403)
+},
+companyApproved)
+/**END */
 router.post(
   "/register",
  /*  (req, res, next) => {
