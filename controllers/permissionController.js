@@ -38,7 +38,13 @@ const index = async (req,res,next)=>{
         messages: []
     }
 
-    const permissions = await models.Permission.findAll()
+    const permissions = await models.Permission.findAll(
+        {include: [
+                  models.Role,
+
+
+        ]}
+    )
     if (permissions){
         result.data= permissions;
         result.messages.push("You have all permissions");
@@ -103,11 +109,21 @@ const destroy = async (req,res,next)=> {
       return res.send(result);
 }
 
+const getAllPermissions = async (req,res,next)=>{
+    const result = {
+        success: true,
+        data: null,
+        messages: []
+    }
+
+}
+
 module.exports = {
     store,
     index,
     show,
     update,
-    destroy
+    destroy,
+    getAllPermissions
 
 }
