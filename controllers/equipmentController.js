@@ -18,6 +18,7 @@ const [equipment, created] = await models.Equipment.findOrCreate({
    }
 });
 if(created){
+    result.success = true
     result.data= equipment,
     result.messages.push('Equipment created successfully')
 }else{
@@ -76,6 +77,7 @@ const index = async (req,res,next)=>{
             if(newNameAlreadyUsed){
                 return res.send("new name is already token")
             }
+            console.log(item.instance.name)
           }
         await item.instance.update({
             name: req.body.name,
