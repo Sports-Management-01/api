@@ -10,7 +10,7 @@ var transporter = nodemailer.createTransport({
 
 const mailTemplates = {
   approveEmail: {
-    message: "Hello :name <br> Your account has been approved",
+    message: "Hello :name <br> Your account has been approved. Add your courts as soon as possible",
     subject: "Account Activation"
   },
   reservationCancellation: {
