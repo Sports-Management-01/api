@@ -66,6 +66,11 @@ const index = async (req, res, next) => {
 
   let fieldQuery = "SELECT * FROM fields where 1=1 ";
 
+  if(req.query?.state){
+    fieldQuery += " and `fields`.`stateId` =" + req?.query?.state;
+
+  }
+
   if (req.query?.category) {
     fieldQuery += " and `fields`.`categoryId` =" + req?.query?.category;
   }
