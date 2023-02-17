@@ -72,7 +72,24 @@ const index = async (req, res, next) => {
     data: null,
     messages: [],
   };
-  const reservations = await models.Reservation.findAll({});
+  const reservations = await models.Reservation.findAll({
+    include: [
+      {
+        model: models.ReservationEquipment,
+        include: [models.Equipment],
+      },
+      {
+        model: models.Field,
+        include: [{model:models.Category},
+      {model:models.User}]
+
+      },
+      {
+        model: models.User,
+        
+      },
+    ],
+  });
   result.data = reservations;
   return res.send(result);
 };
