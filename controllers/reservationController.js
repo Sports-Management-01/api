@@ -82,13 +82,7 @@ const update = async (req, res, next) => {
   // const field = await getInstanceById(req.body.fieldId, "Field")
   // const user = await models.User.findByPk(req.user.id)
   const { from, to, total, cancelationReason } = req.body;
-  // if (!field.success) {
-  //     item.status = 422;
-  //     result.messages.push("Please enter a valid field id");
-  //   } else if (!user.success) {
-  //     item.status = 422;
-  //     result.messages.push("Please enter a valid user id");
-  //   }
+ 
   const item = await getInstanceById(req.params.id, "Reservation");
   if (item.success) {
     const { equipments } = req.body;
@@ -147,8 +141,17 @@ const destroy = async (req, res, next) => {
     data: null,
     messages: [],
   };
+  const {cancelationReason } = req.body;
+  console.log(req.body)
   const item = await getInstanceById(req.params.id, "Reservation");
+  console.log(cancelationReason)
   if (item.success) {
+    const newData = {
+      
+      cancelationReason
+    };
+    console.log(newData);
+    await item.instance.update(newData);
     await item.instance.destroy();
     result.messages.push("Reservation deleted successfully");
   } else {

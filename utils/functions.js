@@ -1,7 +1,7 @@
 const models = require('../models')
 const dayjs = require('dayjs')
 
-const reservationTotalCost = async (fieldId, from, to, equipments = [])=>{
+const reservationTotalCost = async (fieldId, from, to,cancelationReason, equipments = [])=>{
     const field = await models.Field.findByPk(fieldId)
     const start = dayjs(from)
     const end = dayjs(to)

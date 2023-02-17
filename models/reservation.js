@@ -30,7 +30,8 @@ module.exports = (sequelize, DataTypes) => {
     userId: DataTypes.INTEGER,
     from: DataTypes.DATE,
     to: DataTypes.DATE,
-    total: DataTypes.INTEGER
+    total: DataTypes.INTEGER,
+    cancelationReason:DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Reservation',

@@ -6,7 +6,9 @@ var router= express.Router()
 const { check, body } = require("express-validator");
 const { getInstanceById } = require('../services/modelService');
 const isReservationOwner = require('../services/isReservationOwner');
- 
+const sendError = require('../services/errorService')
+router.delete('/:id', isAuthenticated ,destroy);
+
 router.get('/userreservation', isAuthenticated, getUserReservation);
 router.get('/companyreservation', isAuthenticated, companyReservations);
 
@@ -35,6 +37,13 @@ router.get('/', index);
 router.get('/:id', show);
 router.put('/:id', 
 isAuthenticated, 
+async(req, res, next) => {
+    if(await req.user.can('reservation:update')) {
+      console.log(req.user.can('reservation:update'))
+      return next()
+    }
+    return sendError(res,"You don't have permission to continue",403)
+  },
 isReservationOwner,
 check('from', 'Start date should match the YYYY-MM-DD syntaxt').custom((value) => {
     return dateValidation(value)
@@ -56,17 +65,7 @@ check('datesOrder', 'The end date should be after the start date')
     return dateAfter(req.body.from, req.body.to)
 }),
 errorResponse ,update);
-router.delete('/:id', isAuthenticated ,destroy);
-// router.post(
-//     '/equipments',
-//     // isAuthenticated,
-//     body('equipmentId', 'Please enter a valid equipment id').custom(async value => {
-//       const equipmentExists = await getInstanceById(value, 'Equipment')
-//       return equipmentExists.success
-//     }),
-//     errorResponse,
-//     reservationEquipment
-// )
+
 
 
 module.exports= router
