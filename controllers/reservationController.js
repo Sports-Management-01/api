@@ -81,7 +81,7 @@ const update = async (req, res, next) => {
   };
   // const field = await getInstanceById(req.body.fieldId, "Field")
   // const user = await models.User.findByPk(req.user.id)
-  const { from, to, total } = req.body;
+  const { from, to, total, cancelationReason } = req.body;
   // if (!field.success) {
   //     item.status = 422;
   //     result.messages.push("Please enter a valid field id");
@@ -114,6 +114,7 @@ const update = async (req, res, next) => {
         item.instance.fieldId,
         item.instance.from,
         item.instance.to,
+        item.instance.cancelationReason,
         equipments
       ),
     });
