@@ -13,6 +13,10 @@ const mailTemplates = {
     message: "Hello :name <br> Your account has been approved. Add your courts as soon as possible",
     subject: "Account Activation"
   },
+  waitingEmail: {
+    message: "Hello :name <br> We verify your company .  your account will be activated as soon as possible",
+    subject: "Account Activation"
+  },
   reservationCancellation: {
     message: "Hello :name <br> Your reservation on :date for :field has been cancelled",
     subject: "Reservation has been cancelled"

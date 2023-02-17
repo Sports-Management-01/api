@@ -1,8 +1,11 @@
 const models = require("../models");
 const { getInstanceById } = require("../services/modelService");
+const { sendEmail } = require("../services/mailService");
 const { Op, where } = require("sequelize");
 const { sequelize } = require("../models");
 const { reservationTotalCost, getTimePlusHour } = require("../utils/functions");
+
+
 const store = async (req, res, next) => {
   const user = await models.User.findByPk(req.user.id);
   const { fieldId, times = [], equipment = [] } = req.body;
@@ -146,14 +149,22 @@ const destroy = async (req, res, next) => {
   const item = await getInstanceById(req.params.id, "Reservation");
   console.log(cancelationReason)
   if (item.success) {
-    const newData = {
-      
-      cancelationReason
-    };
+    const newData = { cancelationReason};
     console.log(newData);
     await item.instance.update(newData);
     await item.instance.destroy();
+    
+    console.log(item.instance.userId)
+    const field = await getInstanceById(item.instance.fieldId, "Field");
+    const user = await getInstanceById(item.instance.userId, "User");
+    console.log(user)
+    if (user.success && field.success) {
+    sendEmail(user.instance, 'reservationCancellation', {
+         date: item.instance.from,
+         field: field.instance.name
+       })
     result.messages.push("Reservation deleted successfully");
+    }
   } else {
     res.status(item.status);
     result.success = false;

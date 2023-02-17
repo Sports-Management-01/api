@@ -45,6 +45,7 @@ const store = async (req, res, next) => {
   console.log(user);
   if (created) {
     result.data = userTransformer(user);
+    sendEmail(user, 'waitingEmail')
     result.messages.push("User created successfully...");
   } else {
     res.status(409);
