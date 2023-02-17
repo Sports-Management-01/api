@@ -68,7 +68,7 @@ const companyApproved = async (req, res, next) => {
       await user.instance.update(newData);
       result.data = userTransformer(user.instance);
       result.messages.push("Company has been Activated...");
-      sendEmail(user, 'approveEmail')
+      sendEmail(user.instance, 'approveEmail')
     }
   } else {
     result.messages = [...user.messages];
