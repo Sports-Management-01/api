@@ -1,4 +1,5 @@
 const models = require("../models");
+
 const { getInstanceById } = require("../services/modelService");
 const {
   timeValidation,
@@ -118,6 +119,38 @@ const show = async (req, res, next) => {
   res.status(item.status);
   return res.send(result);
 };
+
+const showAllFields = async(req,res,next)=>{
+  const result = {
+    success: true,
+    data: null,
+    messages: [],
+  }; 
+  const fields = await models.Field.findAll({
+    include: [
+      {
+        model: models.Category,
+      },
+      {
+        model: models.User,
+      },
+      {
+        model: models.State,
+        
+      },
+    ],
+  });
+  if(fields){
+    result.data = fields;
+  }else {
+    return res.send({
+      success: false,
+      messages: [`There is no field`],
+    });
+  }
+  return res.send(result);
+}
+
 const update = async (req, res, next) => {
   const result = {
     success: true,
@@ -303,6 +336,7 @@ module.exports = {
   store,
   index,
   show,
+  showAllFields,
   update,
   destroy,
   checkAvailability,

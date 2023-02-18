@@ -1,6 +1,6 @@
 var express= require('express');
 const models = require('../models');
-const { store, index, show, update, destroy, checkAvailability, companyFields } = require('../controllers/fieldController');
+const { store, index, show, update, destroy, checkAvailability, companyFields, showAllFields } = require('../controllers/fieldController');
 const { isAuthenticated } = require('../middlewares/isAuthenticated');
 const multer = require('multer');
 const { body, check } = require('express-validator');
@@ -48,6 +48,7 @@ store);
 
 
 router.get('/', index);
+router.get('/all', showAllFields )
 router.get('/:id', show);
 router.put('/:id', 
 isAuthenticated,
