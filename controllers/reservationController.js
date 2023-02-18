@@ -181,7 +181,7 @@ const destroy = async (req, res, next) => {
          field: field.instance.name
        })
     result.messages.push("Reservation deleted successfully");
-    }
+    }// else if email is not valid ...done
   } else {
     res.status(item.status);
     result.success = false;
