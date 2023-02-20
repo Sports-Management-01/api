@@ -7,6 +7,11 @@ const { reservationTotalCost, getTimePlusHour } = require("../utils/functions");
 
 
 const store = async (req, res, next) => {
+  const result = {
+    success: true,
+    data: null,
+    messages: [],
+  };
   const user = await models.User.findByPk(req.user.id);
   const { fieldId, times = [], equipment = [] } = req.body;
   const field = await getInstanceById(fieldId, "Field");
@@ -43,9 +48,14 @@ const store = async (req, res, next) => {
                 });
             });
           }
+        //    result.data= (reservation)
+        // result.messages.push('Reservation created successfully')
+
         } else {
           err++;
         }
+    // return res.send(result)
+
       }
     }
 
@@ -57,7 +67,7 @@ const store = async (req, res, next) => {
     } else {
       return res.send({
         success: false,
-        messages: [`Could noe create ${err} reservation`],
+        messages: [`Could not create ${err} reservation`],
       });
     }
   }
