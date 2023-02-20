@@ -12,7 +12,7 @@ const store = async (req,res,next)=>{
     const [role, created] = await models.Role.findOrCreate({
         where: { name: req.body.name },
         defaults: {
-          name: req.body.name,
+          required: req.body.required,
         }
       });
       console.log(role)
@@ -38,6 +38,7 @@ const update = async (req,res,next) =>{
     if(role.success){
        await role.instance.update({
         name: req.body.name,
+        required: req.body.required
        });
        result.messages.push("Role updated successfully...");
     }else{
@@ -92,7 +93,11 @@ const show = async(req,res,next)=>{
   };
   const role = await getInstanceById(req.params.id,"Role");
   if(role.success){
-    result.data = role
+    result.success= true,
+    result.messages= [... role.messages]
+    result.data = role.instance;
+  return res.send(result);
+
   }
   result.success = false;
   result.messages = [...role.messages];

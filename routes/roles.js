@@ -29,6 +29,8 @@ router.put(
     if (await req.user.can("role:update")) {
       return next();
     }
+    return sendError(res,"You don't have persmission to continue",403)
+
   },
   update
 );

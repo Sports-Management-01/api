@@ -80,6 +80,7 @@ check('image').custom((value, { req }) => {
   return `The image is invalid: ${uploadErrors?.toLocaleLowerCase() || ''}`
 }),
 update);
+
 router.delete('/:id', destroy);
 router.post('/:id/availability',checkAvailability )
 router.get('/company/fields', 
