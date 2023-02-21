@@ -62,12 +62,12 @@ const store = async (req, res, next) => {
     if (err == 0) {
       return res.send({
         success: true,
-        messages: ["Reservation created successfuly" + err],
+        messages: ["Reservation created successfuly" ],
       });
     } else {
       return res.send({
         success: false,
-        messages: [`Could not create ${err} reservation`],
+        messages: [`Could not create reservation with ${err} error(s)! `],
       });
     }
   }
@@ -156,13 +156,24 @@ const show = async (req, res, next) => {
     data: null,
     messages: [],
   };
-  const item = await getInstanceById(req.params.id, "Reservation");
-  if (item.success) {
+  const item =  await models.Reservation.findOne({
+    where: { id: req.params.id },
+     include:[
+    {
+      model: models.User,
+    
+    },
+    {
+      model: models.Field
+    
+    }
+  ]})
+  if (item) {
     result.success = true;
-    result.data = item.instance.dataValues;
+    result.data = item;
   }
-  result.messages = [...item.messages];
-  res.status(item.status);
+  //result.messages = [...item.messages];
+  //res.status(item.status);
   return res.send(result);
 };
 const destroy = async (req, res, next) => {
