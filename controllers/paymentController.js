@@ -12,7 +12,7 @@ const store = async (req,res,next) => {
         amount: req.body.amount,
         paymentWay: req.body.paymentWay,
         dateTime: req.body.dateTime,
-        paymentInfo: req.body.paymentInfo
+        paymentInfo:JSON.stringify(req.body.paymentInfo)
 
       })
       if(payment){
