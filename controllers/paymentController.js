@@ -16,7 +16,7 @@ const store = async (req,res,next) => {
 
       })
       if(payment){
-        result.data=payment,
+        result.data=payment;
         result.messages.push('Your Payment has been created successfuly')
       }else{
         result.data = false,
