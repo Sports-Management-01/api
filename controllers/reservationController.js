@@ -18,10 +18,9 @@ const store = async (req, res, next) => {
   var err = 0;
   if (field.success) {
     if (Array.isArray(times) && times.length > 0) {
-      // ["09:00", "13:00"]
-      for (const time of times) {
-        const from = req.body.date + " " + time + ":00";
-        const to = req.body.date + " " + getTimePlusHour(time) + ":00";
+      times.forEach(async (time) => {
+        const from = req.body.date + ' ' + time + ':00'
+        const to = req.body.date + ' ' + getTimePlusHour(time) + ':00'
         const [reservation, created] = await models.Reservation.findOrCreate({
           where: {
             userId: req.user.id,
@@ -30,9 +29,9 @@ const store = async (req, res, next) => {
             to,
           },
           defaults: {
-            total: await reservationTotalCost(fieldId, from, to, equipment),
-          },
-        });
+            total: await reservationTotalCost(fieldId, from,to, equipments) 
+          }
+        })
         if (created) {
           if (Array.isArray(req.body.equipment)) {
             req.body.equipment.forEach(async (eq) => {
