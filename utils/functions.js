@@ -23,7 +23,11 @@ const getTimePlusHour = (time) => {
     return hour + ':00'
 }
 
+const pluck = (arr, key) => arr.map(i => i[key]);
+
+
 module.exports = {
     reservationTotalCost,
-    getTimePlusHour
+    getTimePlusHour,
+    pluck
 }
