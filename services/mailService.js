@@ -27,7 +27,25 @@ const mailTemplates = {
 //   date: "2023-01-01",
 //   field: "Stad Alarab"
 // })
+//send email
+function sendPosta(email, token) {
+ 
+  var email = email;
+  var token = token;
 
+  var mailOptions = {
+    from: 'toptepespor@gmail.com',
+      to: email,
+      subject: 'Reset Password Link - Toptepe.com',
+      html: '<p>You requested for reset password, kindly use this <a href="http://localhost:4000/reset-password?token=' + token + '">link</a> to reset your password</p>'
+  }
+ transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });}
 function sendEmail(user, mailType, variables = {}) {
   let message = mailTemplates[mailType].message
   message = message.replace(':name', user.name)
@@ -50,4 +68,4 @@ function sendEmail(user, mailType, variables = {}) {
   });
 }
 
-module.exports = { sendEmail }
+module.exports = { sendEmail, sendPosta }
