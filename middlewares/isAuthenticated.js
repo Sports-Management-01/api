@@ -11,6 +11,7 @@ const isAuthenticated = async(req,res,next)=>{
     }
     const token = auth.split(' ')
     const user = await verifyToken(token[token.length-1])
+    console.log(user)
     if(user){
         req.user = user
         return next()

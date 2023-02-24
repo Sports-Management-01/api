@@ -6,6 +6,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors')
 
+const stripe = require("stripe")('sk_test_51MIZEIJn1PSuOXdRnGJP93tzf8Fa87BoC7xQZ0IU8tUyCul1XNAZqquV3DcutsziSaLNu5HjMPf5W50zws3TeqeT00OC6C9FZu');
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var rolesRouter = require('./routes/roles');
@@ -45,13 +47,30 @@ app.use('/reservations', reservationsRouter);
 app.use('/payments', paymentsRouter)
 app.use('/permissions', permissionsRouter)
 
+
+app.post("/create-payment-intent", async (req, res) => {
+  const { items } = req.body;
+
+  // Create a PaymentIntent with the order amount and currency
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: 1000,
+    currency: "usd",
+    automatic_payment_methods: {
+      enabled: true,
+    },
+  });
+  res.send({
+    clientSecret: paymentIntent.client_secret,
+  });
+});
+
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
