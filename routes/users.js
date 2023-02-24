@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { store,login, index,show,update,destroy,getUsersRole, companyApproved } = require('../controllers/userController');
+const { store,login, index,show,update,destroy,getUsersRole, companyApproved ,showCopmanies} = require('../controllers/userController');
 const {isAuthenticated} = require("../middlewares/isAuthenticated");
 const multer = require("multer");
 const { storage, uploadFilter  } = require("../services/uploadService");
