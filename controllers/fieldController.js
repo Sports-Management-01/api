@@ -124,14 +124,28 @@ const show = async (req, res, next) => {
 		data: null,
 		messages: [],
 	};
-	const item = await getInstanceById(req.params.id, "Field");
-	if (item.success) {
-		result.success = true;
-		result.data = fieldTransformer(item.instance.dataValues);
-		result.data.Category = await item.instance.getCategory();
-	}
-	result.messages = [...item.messages];
-	res.status(item.status);
+	const item = await models.Field.findByPk(req.params.id, {
+		include: [
+			{
+				model: models.Category,
+				include: {
+					model: models.Equipment,
+					as: 'equipments'
+				},
+			}
+		]
+	})
+	result.data = fieldTransformer(item)
+	// const item = await getInstanceById(req.params.id, "Field");
+	// if (item.success) {
+	// 	result.success = true;
+	// 	result.data = fieldTransformer(item.instance.dataValues);
+	// 	const cat = await item.instance.getCategory();
+	// 	result.data.Category = cat
+	// 	result.data.Category.Equipments = await cat.getEquipments()
+	// }
+	// result.messages = [...item.messages];
+	// res.status(item.status);
 	return res.send(result);
 };
 
