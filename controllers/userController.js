@@ -114,7 +114,6 @@ const login = async (req, res, next) => {
   return res.send(result);
 };
 //END LOGIN
-
 //Get All users
 const index = async (req, res, next) => {
   const result = {
