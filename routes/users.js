@@ -1,7 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var bcrypt = require('bcryptjs');
-var randtoken = require('rand-token');
 const { store,login, index,show,update,destroy,getUsersRole, companyApproved } = require('../controllers/userController');
 const {isAuthenticated} = require("../middlewares/isAuthenticated");
 const multer = require("multer");
@@ -176,6 +174,8 @@ router.get("/",
   index
   );
 //END
+
+router.get("/companies", showCopmanies)
 
 //Get my profile
 router.get(

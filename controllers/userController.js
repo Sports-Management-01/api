@@ -93,7 +93,7 @@ const login = async (req, res, next) => {
       (result.success = false),
         result.messages.push("Your account does not activate yet!!!!");
       res.status(401);
-    }
+    }else
     if (verifyPassword(password, user.password)) {
       result.data = userTransformer(user);
       result.messages.push("Loggen in successfully");
@@ -135,7 +135,19 @@ const index = async (req, res, next) => {
   return res.send(result);
 };
 // END Get All users
-
+const showCopmanies = async (req,res,next)=>{
+  const result = {
+    success: true,
+    data: null,
+    messages: [],
+  };
+  const companies = await models.User.findAll({
+     where: { roleId:"2" }
+     })
+     result.data = userTransformers(companies);
+  console.log(result.data);
+  return res.send(result);
+}
 //Get My profile
 const show = async (req, res, next) => {
   const result = {
@@ -239,4 +251,5 @@ module.exports = {
   destroy,
   getUsersRole,
   companyApproved,
+  showCopmanies
 };

@@ -48,13 +48,13 @@ const store = async (req, res, next) => {
                 });
             });
           }
-        //    result.data= (reservation)
-        // result.messages.push('Reservation created successfully')
+          //    result.data= (reservation)
+          // result.messages.push('Reservation created successfully')
 
         } else {
           err++;
         }
-    // return res.send(result)
+        // return res.send(result)
 
       }
     }
@@ -62,7 +62,7 @@ const store = async (req, res, next) => {
     if (err == 0) {
       return res.send({
         success: true,
-        messages: ["Reservation created successfuly" ],
+        messages: ["Reservation created successfuly"],
       });
     } else {
       return res.send({
@@ -76,6 +76,7 @@ const store = async (req, res, next) => {
     messages: ["The field you are trying to add is invalid"],
   });
 };
+
 const index = async (req, res, next) => {
   const result = {
     success: true,
@@ -90,13 +91,13 @@ const index = async (req, res, next) => {
       },
       {
         model: models.Field,
-        include: [{model:models.Category},
-      {model:models.User}]
+        include: [{ model: models.Category },
+        { model: models.User }]
 
       },
       {
         model: models.User,
-        
+
       },
     ],
   });
@@ -112,7 +113,7 @@ const update = async (req, res, next) => {
   // const field = await getInstanceById(req.body.fieldId, "Field")
   // const user = await models.User.findByPk(req.user.id)
   const { from, to, total, cancelationReason } = req.body;
- 
+
   const item = await getInstanceById(req.params.id, "Reservation");
   if (item.success) {
     const { equipments } = req.body;
@@ -156,18 +157,19 @@ const show = async (req, res, next) => {
     data: null,
     messages: [],
   };
-  const item =  await models.Reservation.findOne({
+  const item = await models.Reservation.findOne({
     where: { id: req.params.id },
-     include:[
-    {
-      model: models.User,
-    
-    },
-    {
-      model: models.Field
-    
-    }
-  ]})
+    include: [
+      {
+        model: models.User,
+
+      },
+      {
+        model: models.Field
+
+      }
+    ]
+  })
   if (item) {
     result.success = true;
     result.data = item;
@@ -182,26 +184,26 @@ const destroy = async (req, res, next) => {
     data: null,
     messages: [],
   };
-  const {cancelationReason } = req.body;
+  const { cancelationReason } = req.body;
   console.log(req.body)
   const item = await getInstanceById(req.params.id, "Reservation");
   console.log(cancelationReason)
   if (item.success) {
-    const newData = { cancelationReason};
+    const newData = { cancelationReason };
     console.log(newData);
     await item.instance.update(newData);
     await item.instance.destroy();
-    
+
     console.log(item.instance.userId)
     const field = await getInstanceById(item.instance.fieldId, "Field");
     const user = await getInstanceById(item.instance.userId, "User");
     console.log(user)
     if (user.success && field.success) {
-    sendEmail(user.instance, 'reservationCancellation', {
-         date: item.instance.from,
-         field: field.instance.name
-       })
-    result.messages.push("Reservation deleted successfully");
+      sendEmail(user.instance, 'reservationCancellation', {
+        date: item.instance.from,
+        field: field.instance.name
+      })
+      result.messages.push("Reservation deleted successfully");
     }// else if email is not valid ...done
   } else {
     res.status(item.status);
@@ -244,35 +246,37 @@ const companyReservations = async (req, res, next) => {
     data: null,
     messages: [],
   };
-  const fields = await models.Field.findAll({where: { companyId: req.user.id } , 
-    include:[
-      {model:models.Category},
-    {model:models.Reservation,
-      where: {
-      deletedAt : null
-    },
-    include : [
-      {model:models.User},
-      
-
-        {
-          model: models.ReservationEquipment,
-          include: [models.Equipment],
+  const fields = await models.Field.findAll({
+    where: { companyId: req.user.id },
+    include: [
+      { model: models.Category },
+      {
+        model: models.Reservation,
+        where: {
+          deletedAt: null
         },
+        include: [
+          { model: models.User },
 
-        // {
-        //   model: models.Field,
-        //   include: [models.Category],
-        // },
-      ],
-  },
-  ],
-}
-);
+
+          {
+            model: models.ReservationEquipment,
+            include: [models.Equipment],
+          },
+
+          // {
+          //   model: models.Field,
+          //   include: [models.Category],
+          // },
+        ],
+      },
+    ],
+  }
+  );
   result.data = fields;
-  
+
   return res.send(result);
- 
+
 };
 module.exports = {
   store,
