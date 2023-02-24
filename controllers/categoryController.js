@@ -11,6 +11,7 @@ const store = async (req, res, next) => {
     data: null,
     messages: [],
   };
+  console.log(req.body)
   const [category, created] = await models.Category.findOrCreate({
     where: {
       name: req.body.name,
@@ -22,7 +23,7 @@ const store = async (req, res, next) => {
   });
 
   if (created) {
-    const equipments = await category.addEquipments(req.body.equipments)
+    const equipments = await category.addEquipments(req.body.eqs)
     result.data = categoryTransformer(category);
     result.messages.push("Category created successfully");
   } else {
